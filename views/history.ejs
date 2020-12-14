@@ -1,0 +1,39 @@
+<%- include("./partials/header"); %>
+
+<div class="container">
+    <h1>History</h1>
+    <div class="date">
+        <form action="/history/" method="GET">
+            <select name="year" id="year">
+                <option value="2020">2020</option>
+                <option value="2021">2021</option>
+                <option value="2022">2022</option>
+            </select>
+            <select name="month" id="month">
+                <option value="">select...</option>
+                <option value="01">1</option>
+                <option value="02">2</option>
+                <option value="03">3</option>
+                <option value="04">4</option>
+                <option value="05">5</option>
+                <option value="06">6</option>
+                <option value="07">7</option>
+                <option value="08">8</option>
+                <option value="09">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+            </select>
+            <select name="date" id="date">
+                <option value="">select...</option>
+            </select>
+            <input type="submit" value="Search">
+        </form>
+    </div>
+    <div>
+
+    </div>
+</div>
+
+<script src="/history.js"></script>
+<%- include("./partials/footer"); %>

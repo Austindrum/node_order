@@ -1,0 +1,109 @@
+<%- include("./partials/header"); %>
+<div class="container order">
+    <form 
+    <% if(orderedInfo.length > 0){ %>
+    action="/order?_method=PUT" method="POST"
+    <% }else{ %>
+    action="/order" method="POST"
+    <% } %>>
+        <% if(orderedInfo.length > 0){ %>
+            <input 
+            type="text"
+            style="display: none;"
+            name="orderId"
+            value="<%= orderedInfo[0].id %>">
+        <% } %>
+        <input
+        style="display: none;" 
+        class="target-date" 
+        data-date="<%= date %>"
+        name="date"
+        value="<%= date %>">
+        <div class="user-info">
+            <i class="fas fa-user fa-lg"></i>
+            <ul>
+                <li><strong>ID</strong>: <%= user.work_id %></li>
+                <!-- <li><strong>Work</strong>: Dayshift</li> -->
+            </ul>
+        </div>
+        <div class="info-block">
+            <i class="fas fa-coffee fa-lg"></i>
+            <p><strong>Breakfast</strong></p>
+            <select name="breakfast">
+                <option value="">select..</option>
+                <% meals.forEach(e => { %>
+                    <% if(e.type === "b"){ %>
+                        <option value="<%= e.id %>"
+                        <% if(orderedInfo.length > 0){ %>
+                            <%= orderedInfo[0].bmId === e.id ? "selected" : "" %>
+                        <% } %>
+                        ><%= e.name %></option>
+                    <% } %>
+                <% }) %>
+            </select>
+        </div>
+        <div class="info-block">
+            <i class="fas fa-utensils fa-lg"></i>
+            <p><strong>Dinner</strong></p>
+            <select name="dinner">
+                <option value="">select..</option>
+                <% meals.forEach(e => { %>
+                    <% if(e.type === "d"){ %>
+                        <option value="<%= e.id %>"
+                        <% if(orderedInfo.length > 0){ %>
+                            <%= orderedInfo[0].dmId === e.id ? "selected" : "" %>
+                        <% } %>
+                        ><%= e.name %></option>
+                    <% } %>
+                <% }) %>
+            </select>
+        </div>
+        <div class="info-block">
+            <i class="fas fa-moon fa-lg"></i>
+            <p><strong>Midnight</strong></p>
+            <select name="midnight" id="">
+                <option value="">select..</option>
+                <% meals.forEach(e => { %>
+                    <% if(e.type === "m"){ %>
+                        <option value="<%= e.id %>"
+                        <% if(orderedInfo.length > 0){ %>
+                            <%= orderedInfo[0].mmId === e.id ? "selected" : "" %>
+                        <% } %>
+                        ><%= e.name %></option>
+                    <% } %>
+                <% }) %>
+            </select>
+        </div>
+        <input type="submit"
+        <% if(orderedInfo.length > 0){ %>
+        value="Edit"
+        <% }else{ %>
+        value="Submit"
+        <% } %>
+        >
+    </form>
+    <% if(orderedInfo.length > 0){ %>
+        <form action="/order?_method=DELETE" method="POST">
+            <input 
+            type="text"
+            style="display: none;"
+            name="orderId"
+            value="<%= orderedInfo[0].id %>">
+            <input
+            style="display: none;" 
+            class="target-date" 
+            data-date="<%= date %>"
+            name="date"
+            value="<%= date %>">
+            <input type="submit" value="Delete">
+        </form>
+    <% } %>
+    <div class="calendar-wrapper">
+        <button id="btnPrev" type="button">Prev</button>
+        <button id="btnNext" type="button">Next</button>
+        <div id="divCal">
+        </div>
+    </div>
+</div>
+<script src="/calendar.js"></script>
+<%- include("./partials/footer"); %>
