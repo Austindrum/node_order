@@ -35,7 +35,11 @@
                     <% if(e.type === "b"){ %>
                         <option value="<%= e.id %>"
                         <% if(orderedInfo.length > 0){ %>
-                            <%= orderedInfo[0].bmId === e.id ? "selected" : "" %>
+                            <% orderedInfo[0].meal.forEach(data => { %>
+                                <% if(data.id === e.id) { %>
+                                    selected 
+                                <% } %>
+                            <% }); %>
                         <% } %>
                         ><%= e.name %></option>
                     <% } %>
@@ -51,7 +55,11 @@
                     <% if(e.type === "d"){ %>
                         <option value="<%= e.id %>"
                         <% if(orderedInfo.length > 0){ %>
-                            <%= orderedInfo[0].dmId === e.id ? "selected" : "" %>
+                            <% orderedInfo[0].meal.forEach(data => { %>
+                                <% if(data.id === e.id) { %>
+                                    selected 
+                                <% } %>
+                            <% }); %>
                         <% } %>
                         ><%= e.name %></option>
                     <% } %>
@@ -67,7 +75,11 @@
                     <% if(e.type === "m"){ %>
                         <option value="<%= e.id %>"
                         <% if(orderedInfo.length > 0){ %>
-                            <%= orderedInfo[0].mmId === e.id ? "selected" : "" %>
+                            <% orderedInfo[0].meal.forEach(data => { %>
+                                <% if(data.id === e.id) { %>
+                                    selected 
+                                <% } %>
+                            <% }); %>
                         <% } %>
                         ><%= e.name %></option>
                     <% } %>

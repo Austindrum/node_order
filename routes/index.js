@@ -4,6 +4,7 @@ const User = db.User;
 const Date = db.Date;
 const Meal = db.Meal;
 const Order = db.Order;
+const OrderMeal = db.OrderMeal;
 const url = require('url');
 const passport = require("../config/passport");
 // get date meals
@@ -22,7 +23,12 @@ async function getDateMeals(targetDate, userId, res){
     })
     let orderedInfo = await User.findByPk(userId, {
         include: [
-            { model: Order }
+            { 
+                model: Order,
+                include: [
+                    { model: Meal, as: "meal" }
+                ]
+            }
         ]
     }).then(user => {
         return user.toJSON().Orders.filter(order => order.date === targetDate);
@@ -32,11 +38,43 @@ async function getDateMeals(targetDate, userId, res){
     return res.render("order", { meals, date, orderedInfo});
 }
 
-async function getDateOrderMeal(data){
-    const bm = await Meal.findByPk(data.bm);
-    const dm = await Meal.findByPk(data.dm);
-    const mm = await Meal.findByPk(data.mm);
-    console.log(bm, dm, mm);
+function getDateOrderMeal(orders){
+    // let data = [];
+    // orders.forEach(async order=>{
+    //     let bm = await Meal.findByPk(order.bmId);
+    //     let dm = await Meal.findByPk(order.dmId);
+    //     let mm = await Meal.findByPk(order.mmId);
+    //     let temp = {
+    //         id: order.id,
+    //         date: order.date,
+    //         bm: bm ? bm.toJSON() : "",
+    //         dm: dm ? dm.toJSON() : "",
+    //         mm: mm ? mm.toJSON() : ""
+    //     }
+    // })
+    let data = orders.map(async order=>{
+        let bm = await Meal.findByPk(order.bmId);
+        let dm = await Meal.findByPk(order.dmId);
+        let mm = await Meal.findByPk(order.mmId);
+        return {
+            id: order.id,
+            date: order.date,
+            bm: bm ? bm.toJSON() : "",
+            dm: dm ? dm.toJSON() : "",
+            mm: mm ? mm.toJSON() : ""
+        }
+    })
+    console.log(data);
+    // console.log(data);
+    // id: d.id,
+    // date: d.date,
+    // bm: await Meal.findByPk(d.bm),
+    // dm: await Meal.findByPk(d.dm),
+    // mm: await Meal.findByPk(d.mm)
+    // const bm = await Meal.findByPk(order.bmId);
+    // const dm = await Meal.findByPk(order.dmId);
+    // const mm = await Meal.findByPk(order.mmId);
+    // console.log(bm, dm, mm);
     // return { bm, dm, mm }
 }
 
@@ -80,7 +118,6 @@ module.exports = (app) => {
                     data = orders.filter(order => {
                         return order.date.split("-")[0] === year;
                     })
-                    console.log(data);
                     getDateOrderMeal(data);
                     return res.render("history");
                 }
@@ -97,7 +134,6 @@ module.exports = (app) => {
                     })
                 }
             }
-            console.log(data);
             getDateOrderMeal(data);
             return res.render("history");
         })
@@ -113,36 +149,43 @@ module.exports = (app) => {
         if(req.body.breakfast || req.body.dinner || req.body.midnight){
             await Order.create({
                 UserId: req.user.id,
-                date: req.body.date,
-                bmId: req.body.breakfast === "" ? null : parseInt(req.body.breakfast),
-                dmId: req.body.dinner === "" ? null : parseInt(req.body.dinner),
-                mmId: req.body.midnight === "" ? null : parseInt(req.body.midnight)
+                date: req.body.date
+            }).then(async order=>{
+                if(req.body.breakfast) await OrderMeal.create({ OrderId: order.id, MealId: req.body.breakfast });
+                if(req.body.dinner) await OrderMeal.create({ OrderId: order.id, MealId: req.body.dinner });
+                if(req.body.midnight) await OrderMeal.create({ OrderId: order.id, MealId: req.body.midnight });
             })
         }
         return res.redirect(`/order/${req.body.date}`);
     })
     app.put("/order", async (req, res)=>{
         if(req.body.breakfast || req.body.dinner || req.body.midnight){
-            await Order.findByPk(req.body.orderId)
-            .then(order=>{
-                order.update({
-                    bmId: req.body.breakfast === "" ? null : parseInt(req.body.breakfast),
-                    dmId: req.body.dinner === "" ? null : parseInt(req.body.dinner),
-                    mmId: req.body.midnight === "" ? null : parseInt(req.body.midnight)
-                })
-                .then(()=>{
-                    return res.redirect(`/order/${req.body.date}`);
-                })
+            OrderMeal.destroy({
+                where: {
+                    OrderId: req.body.orderId
+                }
+            })
+            .then(async ()=>{
+                if(req.body.breakfast) await OrderMeal.create({ OrderId: req.body.orderId, MealId: req.body.breakfast });
+                if(req.body.dinner) await OrderMeal.create({ OrderId: req.body.orderId, MealId: req.body.dinner });
+                if(req.body.midnight) await OrderMeal.create({ OrderId: req.body.orderId, MealId: req.body.midnight });
+            })
+            .then(()=>{
+                return res.redirect(`/order/${req.body.date}`);
             })
         }
     })
     app.delete("/order", async (req, res)=>{
-        await Order.findByPk(req.body.orderId)
-        .then(order=>{
-            order.destroy()
-            .then(()=>{
-                return res.redirect(`/order/${req.body.date}`);
-            })
-        })
+        await OrderMeal.destroy({
+            where: {
+                OrderId: req.body.orderId
+            }
+        });
+        await Order.destroy({
+            where: {
+                id: req.body.orderId
+            }
+        });
+        return res.redirect(`/order/${req.body.date}`);
     })
 }
