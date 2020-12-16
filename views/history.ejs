@@ -31,7 +31,14 @@
         </form>
     </div>
     <div>
-
+        <h2><%= targetDay %></h2>
+        <% data.forEach(d => { %>
+            <ul>
+                <% d.meal.forEach(m => { %>
+                    <li><%= m.name %> - <%= m.price %></li>
+                <% }); %>
+            </ul>
+        <% }); %>
     </div>
 </div>
 

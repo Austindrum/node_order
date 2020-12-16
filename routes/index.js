@@ -38,46 +38,6 @@ async function getDateMeals(targetDate, userId, res){
     return res.render("order", { meals, date, orderedInfo});
 }
 
-function getDateOrderMeal(orders){
-    // let data = [];
-    // orders.forEach(async order=>{
-    //     let bm = await Meal.findByPk(order.bmId);
-    //     let dm = await Meal.findByPk(order.dmId);
-    //     let mm = await Meal.findByPk(order.mmId);
-    //     let temp = {
-    //         id: order.id,
-    //         date: order.date,
-    //         bm: bm ? bm.toJSON() : "",
-    //         dm: dm ? dm.toJSON() : "",
-    //         mm: mm ? mm.toJSON() : ""
-    //     }
-    // })
-    let data = orders.map(async order=>{
-        let bm = await Meal.findByPk(order.bmId);
-        let dm = await Meal.findByPk(order.dmId);
-        let mm = await Meal.findByPk(order.mmId);
-        return {
-            id: order.id,
-            date: order.date,
-            bm: bm ? bm.toJSON() : "",
-            dm: dm ? dm.toJSON() : "",
-            mm: mm ? mm.toJSON() : ""
-        }
-    })
-    console.log(data);
-    // console.log(data);
-    // id: d.id,
-    // date: d.date,
-    // bm: await Meal.findByPk(d.bm),
-    // dm: await Meal.findByPk(d.dm),
-    // mm: await Meal.findByPk(d.mm)
-    // const bm = await Meal.findByPk(order.bmId);
-    // const dm = await Meal.findByPk(order.dmId);
-    // const mm = await Meal.findByPk(order.mmId);
-    // console.log(bm, dm, mm);
-    // return { bm, dm, mm }
-}
-
 module.exports = (app) => {
     app.get("/", (req, res)=>{
         res.redirect("/order");
@@ -100,43 +60,55 @@ module.exports = (app) => {
         let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
         await User.findByPk(req.user.id, {
             include: [
-                {model: Order}
+                {
+                    model: Order,
+                    include: [
+                        { 
+                            model: Meal,
+                            as: "meal"
+                        }
+                    ]
+                }
             ]
         }).then(user=>{
-            const current_url = new URL(fullUrl);
-            const searchEmpty = current_url.search === "";
-            const orders = user.toJSON().Orders;
+            let current_url = new URL(fullUrl);
+            let searchEmpty = current_url.search === "";
+            let orders = user.toJSON().Orders;
             let data = [];
+            let targetDay = "";
             if(searchEmpty){
-                const today = moment().format().slice(0, 10);
+                let today = moment().format().slice(0, 10);
                 data = orders.filter(order => order.date === today);
+                targetDay = today;
             }else{
-                const year = current_url.searchParams.get("year");
-                const month = current_url.searchParams.get("month");
-                const date = current_url.searchParams.get("date");
+                let year = current_url.searchParams.get("year");
+                let month = current_url.searchParams.get("month");
+                let date = current_url.searchParams.get("date");
                 if(month === ""){   
                     data = orders.filter(order => {
                         return order.date.split("-")[0] === year;
                     })
-                    getDateOrderMeal(data);
-                    return res.render("history");
+                    targetDay = year;
+                    return res.render("history", { data, targetDay });
                 }
                 if(date === ""){
                     data = orders.filter(order => {
-                        const dydm = order.date.split("-")[0] + "-" + order.date.split("-")[1];
-                        const sysm = year + "-" + month;
+                        let dydm = order.date.split("-")[0] + "-" + order.date.split("-")[1];
+                        let sysm = year + "-" + month;
                         return dydm === sysm;
                     })
+                    targetDay = year + "-" + month;
                 }
                 if(year && month && date){
                     data = orders.filter(order => {
                         return order.date === year + "-" + month + "-" + date;
                     })
+                    targetDay = year + "-" + month + "-" + date;
                 }
             }
-            getDateOrderMeal(data);
-            return res.render("history");
+            return res.render("history", { data, targetDay });
         })
+        .catch(err => console.log(err))
     })
     app.get("/order/:date", (req, res)=>{
         getDateMeals(req.params.date, req.user.id, res)
