@@ -1,4 +1,5 @@
 var targetDay = document.getElementsByClassName("target-date")[0].dataset.date.split("-");
+var dateOrders = Array.from(document.querySelectorAll(".date-order").length > 0 ? document.getElementsByClassName("date-order") : []);
 var Cal = function(divId) {
     //Store div id
     this.divId = divId;
@@ -101,9 +102,17 @@ Cal.prototype.showMonth = function(y, m) {
         let paramMonth = (this.currMonth + 1) < 10 ? `0${this.currMonth + 1}` : this.currMonth + 1;
         let paramDate = i < 10 ? `0${i}` : i;
         if (this.chkY == this.currYear && this.chkM == this.currMonth && i == this.currDay) {
-            html += '<td class="today"><a href="/order/' + this.currYear + '-' + paramMonth + '-' + paramDate +'">' + i + '</a></td>';
+            if(dateOrders.some(order=> order.dataset.orderdate === this.currYear + '-' + paramMonth + '-' + paramDate)){
+                html += '<td class="today"><span class="light"></span><a href="/order/' + this.currYear + '-' + paramMonth + '-' + paramDate +'">' + i + '</a></td>';
+            }else{
+                html += '<td class="today"><a href="/order/' + this.currYear + '-' + paramMonth + '-' + paramDate +'">' + i + '</a></td>';
+            }
         } else {
-            html += '<td class="normal"><a href="/order/' + this.currYear + '-' + paramMonth + '-' + paramDate +'">' + i + '</a></td>';
+            if(dateOrders.some(order=> order.dataset.orderdate === this.currYear + '-' + paramMonth + '-' + paramDate)){
+                html += '<td class="normal"><span class="light"></span><a href="/order/' + this.currYear + '-' + paramMonth + '-' + paramDate +'">' + i + '</a></td>';
+            }else{
+                html += '<td class="normal"><a href="/order/' + this.currYear + '-' + paramMonth + '-' + paramDate +'">' + i + '</a></td>';
+            }
         }
         // If Saturday, closes the row
         if ( dow == 6 ) {
@@ -131,7 +140,9 @@ window.onload = function() {
     // Start calendar
     var c = new Cal("divCal");			
     c.showcurr();
+    
     // Bind next and previous button clicks
+
     getId('btnNext').onclick = function() {
         c.nextMonth();
     };

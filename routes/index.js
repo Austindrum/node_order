@@ -33,14 +33,31 @@ async function getDateMeals(targetDate, userId, res){
     }).then(user => {
         return user.toJSON().Orders.filter(order => order.date === targetDate);
     })
+    let ordersDate = await User.findByPk(userId, {
+        include: [
+            { 
+                model: Order,
+                include: [
+                    { model: Meal, as: "meal" }
+                ]
+            }
+        ]
+    }).then(user=>{
+        return user.toJSON().Orders.map(order => order.date);
+    })
     const meals = datemeals.toJSON().meal;
     const date = datemeals.toJSON().date;
-    return res.render("order", { meals, date, orderedInfo});
+    return res.render("order", { meals, date, orderedInfo, ordersDate});
 }
 
 module.exports = (app) => {
     app.get("/", (req, res)=>{
-        res.redirect("/order");
+        if(req.user.work_id === "P0000"){
+            
+            return res.redirect("/orderform");
+        }else{
+            return res.redirect("/order");
+        }
     })
     app.get("/signin", (req, res)=>{
         return res.render("signin");
@@ -81,31 +98,57 @@ module.exports = (app) => {
                 data = orders.filter(order => order.date === today);
                 targetDay = today;
             }else{
-                let year = current_url.searchParams.get("year");
-                let month = current_url.searchParams.get("month");
-                let date = current_url.searchParams.get("date");
-                if(month === ""){   
-                    data = orders.filter(order => {
-                        return order.date.split("-")[0] === year;
-                    })
-                    targetDay = year;
+                let from = current_url.searchParams.get("from");
+                let to = current_url.searchParams.get("to");
+                if(!from && !to){
+                    console.log("None Date");
                     return res.render("history", { data, targetDay });
                 }
-                if(date === ""){
-                    data = orders.filter(order => {
-                        let dydm = order.date.split("-")[0] + "-" + order.date.split("-")[1];
-                        let sysm = year + "-" + month;
-                        return dydm === sysm;
-                    })
-                    targetDay = year + "-" + month;
+                if(from && !to){
+                    data = orders.filter(order => from === order.date);
+                    targetDay = from;
+                    return res.render("history", { data, targetDay });
                 }
-                if(year && month && date){
-                    data = orders.filter(order => {
-                        return order.date === year + "-" + month + "-" + date;
+                if(!from && to){
+                    console.log("None From");
+                    return res.render("history", { data, targetDay });
+                }
+                if(from && to){
+                    data = orders.filter(order => moment(order.data).isBetween(from, to));
+                    data.sort((a, b)=>{
+                        return moment(a.date) - moment(b.date);
                     })
-                    targetDay = year + "-" + month + "-" + date;
+                    console.log(data);
+                    targetDay = `${from} ~ ${to}`;
+                    return res.render("history", { data, targetDay });
                 }
             }
+            // else{
+            //     let year = current_url.searchParams.get("year");
+            //     let month = current_url.searchParams.get("month");
+            //     let date = current_url.searchParams.get("date");
+            //     if(month === ""){   
+            //         data = orders.filter(order => {
+            //             return order.date.split("-")[0] === year;
+            //         })
+            //         targetDay = year;
+            //         return res.render("history", { data, targetDay });
+            //     }
+            //     if(date === ""){
+            //         data = orders.filter(order => {
+            //             let dydm = order.date.split("-")[0] + "-" + order.date.split("-")[1];
+            //             let sysm = year + "-" + month;
+            //             return dydm === sysm;
+            //         })
+            //         targetDay = year + "-" + month;
+            //     }
+            //     if(year && month && date){
+            //         data = orders.filter(order => {
+            //             return order.date === year + "-" + month + "-" + date;
+            //         })
+            //         targetDay = year + "-" + month + "-" + date;
+            //     }
+            // }
             return res.render("history", { data, targetDay });
         })
         .catch(err => console.log(err))
@@ -113,6 +156,7 @@ module.exports = (app) => {
     app.get("/order/:date", (req, res)=>{
         getDateMeals(req.params.date, req.user.id, res)
     })
+
     app.get("/order", (req, res) => {
         let today = moment().format().slice(0, 10);
         getDateMeals(today, req.user.id, res)
@@ -159,5 +203,35 @@ module.exports = (app) => {
             }
         });
         return res.redirect(`/order/${req.body.date}`);
+    })
+
+    app.get("/orderform", async (req, res)=>{
+        let today = moment().format().slice(0, 10);
+        let orders = await Order.findAll({
+            raw: true,
+            nest: true,
+            where: {
+                date: today
+            },
+            include: [
+                User,
+                {
+                    model: Meal,
+                    as: "meal",
+                }
+            ]
+        })
+        return res.render("admin/orderform", { orders, today });
+    })
+    app.get("/meals", async (req, res)=>{
+        let data = await Meal.findAll({
+            raw: true,
+            nest: true
+        });
+        return res.render("admin/meals", { data });
+    })
+    app.get("/logout", (req, res)=>{
+        req.logout();
+        res.redirect("/signin");
     })
 }

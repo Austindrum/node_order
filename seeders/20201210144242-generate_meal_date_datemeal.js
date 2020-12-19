@@ -38,6 +38,13 @@ module.exports = {
         password: await bcrypt.hashSync("123", bcrypt.genSaltSync(10), null),
         createdAt: new Date(),
         updatedAt: new Date(),
+      },
+      {
+        id: 3,
+        work_id: "P0000",
+        password: await bcrypt.hashSync("123", bcrypt.genSaltSync(10), null),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       }
     ], {});
     queryInterface.bulkInsert('Meals', Array.from({ length: 40 }).map((item, index) =>

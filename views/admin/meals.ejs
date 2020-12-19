@@ -1,0 +1,23 @@
+<%- include("../partials/header"); %>
+<div class="container">
+    <h1>Meals</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% data.forEach(meal=>{ %>
+                <tr>
+                    <td><%= meal.name %></td>
+                    <td><%= meal.price %></td>
+                    <td><%= meal.type %></td>
+                </tr>    
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+<%- include("../partials/footer"); %>

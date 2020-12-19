@@ -1,0 +1,11 @@
+<%- include("../partials/header"); %>
+<div class="container">
+    <h1>Order Form</h1>
+    <h2><%= today %></h2>
+    <ul>
+        <% orders.forEach(order=>{ %>
+            <li><%= order.User.work_id %> - <%= order.meal.name %> - <%= order.meal.price %> - <%= order.meal.type %></li>
+        <% }) %>
+    </ul>
+</div>
+<%- include("../partials/footer"); %>

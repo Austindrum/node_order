@@ -26,15 +26,36 @@
                     </div>
                 </div>
                 <ul class="nav-list">
-                    <li class="nav-item">
-                        <a href="/">Menu</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/user">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/history">History</a>
-                    </li>
+                    <% if(user){ %>
+                        <% if(user.work_id === "P0000"){%>
+                            <li class="nav-item">
+                                <a href="/meals">Meals</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/orderform">Order Form</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/logout">Logout</a>
+                            </li>
+                        <% }else{ %>
+                            <li class="nav-item">
+                                <a href="/">Menu</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/user">Profile</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/history">History</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/logout">Logout</a>
+                            </li>
+                        <% } %>
+                    <% }else{ %>
+                        <li class="nav-item">
+                            <a href="/signin">Sign in</a>
+                        </li>
+                    <% } %>
                 </ul>
             </div>
             <div class="hamburger">

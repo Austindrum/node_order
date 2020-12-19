@@ -1,10 +1,15 @@
 <%- include("./partials/header"); %>
+<% if(ordersDate){ %>
+    <% ordersDate.forEach(date=>{ %>
+        <div style="display: none;" class="date-order" data-orderDate="<%= date %>"></div>
+    <% }) %>  
+<% } %>  
 <div class="container order">
     <form 
     <% if(orderedInfo.length > 0){ %>
-    action="/order?_method=PUT" method="POST"
+        action="/order?_method=PUT" method="POST"
     <% }else{ %>
-    action="/order" method="POST"
+        action="/order" method="POST"
     <% } %>>
         <% if(orderedInfo.length > 0){ %>
             <input 
@@ -19,12 +24,10 @@
         data-date="<%= date %>"
         name="date"
         value="<%= date %>">
-        <div class="user-info">
+        <div class="info-block">
             <i class="fas fa-user fa-lg"></i>
-            <ul>
-                <li><strong>ID</strong>: <%= user.work_id %></li>
-                <!-- <li><strong>Work</strong>: Dayshift</li> -->
-            </ul>
+            <p><strong>ID</strong></p>
+            <span class="user-id"><%= user.work_id %></span>
         </div>
         <div class="info-block">
             <i class="fas fa-coffee fa-lg"></i>
@@ -89,26 +92,28 @@
         <input type="submit"
         <% if(orderedInfo.length > 0){ %>
         value="Edit"
+        class="edit"
         <% }else{ %>
         value="Submit"
+        class="submit"
         <% } %>
         >
     </form>
     <% if(orderedInfo.length > 0){ %>
-        <form action="/order?_method=DELETE" method="POST">
-            <input 
-            type="text"
-            style="display: none;"
-            name="orderId"
-            value="<%= orderedInfo[0].id %>">
-            <input
-            style="display: none;" 
-            class="target-date" 
-            data-date="<%= date %>"
-            name="date"
-            value="<%= date %>">
-            <input type="submit" value="Delete">
-        </form>
+    <form action="/order?_method=DELETE" method="POST">
+        <input 
+        type="text"
+        style="display: none;"
+        name="orderId"
+        value="<%= orderedInfo[0].id %>">
+        <input
+        style="display: none;" 
+        class="target-date" 
+        data-date="<%= date %>"
+        name="date"
+        value="<%= date %>">
+        <input type="submit" class="delete" value="Delete">
+    </form>
     <% } %>
     <div class="calendar-wrapper">
         <button id="btnPrev" type="button">Prev</button>

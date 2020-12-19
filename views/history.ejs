@@ -1,44 +1,41 @@
 <%- include("./partials/header"); %>
 
 <div class="container">
-    <h1>History</h1>
     <div class="date">
         <form action="/history/" method="GET">
-            <select name="year" id="year">
-                <option value="2020">2020</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-            </select>
-            <select name="month" id="month">
-                <option value="">select...</option>
-                <option value="01">1</option>
-                <option value="02">2</option>
-                <option value="03">3</option>
-                <option value="04">4</option>
-                <option value="05">5</option>
-                <option value="06">6</option>
-                <option value="07">7</option>
-                <option value="08">8</option>
-                <option value="09">9</option>
-                <option value="10">10</option>
-                <option value="11">11</option>
-                <option value="12">12</option>
-            </select>
-            <select name="date" id="date">
-                <option value="">select...</option>
-            </select>
-            <input type="submit" value="Search">
+            <div class="history-block">
+                <p><strong>From</strong></p>
+                <input type="date" name="from">
+            </div>
+            <div class="history-block">
+                <p><strong>To</strong></p>
+                <input type="date" name="to">
+            </div>
+            <div>
+                <input type="submit" value="Search">
+            </div>
         </form>
     </div>
-    <div>
+    <div class="history-data">
         <h2><%= targetDay %></h2>
+        <div class="date-data head">
+            <div class="date"><strong>Date</strong></div>
+            <div class="name"><strong>Name</strong></div>
+            <div class="price"><strong>Price</strong></div>
+        </div>
         <% data.forEach(d => { %>
-            <ul>
-                <% d.meal.forEach(m => { %>
-                    <li><%= m.name %> - <%= m.price %></li>
-                <% }); %>
-            </ul>
+        <div class="date-data">
+            <% d.meal.forEach(m => { %>
+                <div class="date"><%= d.date %></div>
+                <div class="name"><%= m.name %></div>
+                <div class="meal-price"><%= m.price %></div>
+            <% }); %>
+        </div>
         <% }); %>
+        <div class="total-price">
+            <div>Total</div>
+            <div class="price" id="price">0</div>
+        </div>
     </div>
 </div>
 
