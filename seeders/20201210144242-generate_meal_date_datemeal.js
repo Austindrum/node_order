@@ -67,12 +67,23 @@ module.exports = {
         updatedAt: new Date(),
       }
     ], {});
+    queryInterface.bulkInsert("Shops", Array.from({ length: 3 }).map((item, index) => 
+      ({
+        id: index + 1,
+        name: faker.company.companyName(),
+        tel: faker.phone.phoneNumber(),
+        address: faker.address.streetAddress(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+    ), {})
     queryInterface.bulkInsert('Meals', Array.from({ length: 40 }).map((item, index) =>
       ({
         id: index + 1,
         name: faker.commerce.productName(),
         price: faker.commerce.price(),
         type: setType(),
+        ShopId: Math.floor(Math.random() * 3) + 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       })
@@ -98,6 +109,7 @@ module.exports = {
 
   down: async (queryInterface, Sequelize) => {
     queryInterface.bulkDelete('Users', null, {});
+    queryInterface.bulkDelete('Shops', null, {});
     queryInterface.bulkDelete('Meals', null, {});
     queryInterface.bulkDelete('Dates', null, {});
     return queryInterface.bulkDelete('DateMeals', null, {});

@@ -1,10 +1,10 @@
 <%- include("../partials/header"); %>
-<div class="container">
-    <h1>Meals</h1>
+<div class="container meals">
     <table>
         <thead>
             <tr>
-                <th>Name</th>
+                <th>Shop</th>
+                <th>Meal Name</th>
                 <th>Price</th>
                 <th>Type</th>
             </tr>
@@ -12,9 +12,18 @@
         <tbody>
             <% data.forEach(meal=>{ %>
                 <tr>
+                    <td><%= meal.Shop.name %></td>
                     <td><%= meal.name %></td>
-                    <td><%= meal.price %></td>
-                    <td><%= meal.type %></td>
+                    <td class="price"><%= meal.price %></td>
+                    <td>
+                        <% if(meal.type === "b"){ %>
+                            Breakfast
+                        <% }else if(meal.type === "d"){ %>
+                            Dinner
+                        <% }else{ %>
+                            Midnight
+                        <% } %>
+                    </td>
                 </tr>    
             <% }) %>
         </tbody>

@@ -32,7 +32,7 @@
         <div class="info-block">
             <i class="fas fa-coffee fa-lg"></i>
             <p><strong>Breakfast</strong></p>
-            <select name="breakfast">
+            <select name="breakfast" <%= overTime.breakfast ? "disabled" : "" %>>
                 <option value="">select..</option>
                 <% meals.forEach(e => { %>
                     <% if(e.type === "b"){ %>
@@ -52,7 +52,7 @@
         <div class="info-block">
             <i class="fas fa-utensils fa-lg"></i>
             <p><strong>Dinner</strong></p>
-            <select name="dinner">
+            <select name="dinner" <%= overTime.dinner ? "disabled" : "" %>>
                 <option value="">select..</option>
                 <% meals.forEach(e => { %>
                     <% if(e.type === "d"){ %>
@@ -72,7 +72,7 @@
         <div class="info-block">
             <i class="fas fa-moon fa-lg"></i>
             <p><strong>Midnight</strong></p>
-            <select name="midnight" id="">
+            <select name="midnight" <%= overTime.midnight ? "disabled" : "" %>>
                 <option value="">select..</option>
                 <% meals.forEach(e => { %>
                     <% if(e.type === "m"){ %>
@@ -89,15 +89,21 @@
                 <% }) %>
             </select>
         </div>
-        <input type="submit"
-        <% if(orderedInfo.length > 0){ %>
-        value="Edit"
-        class="edit"
+        <% if(overTime.breakfast && overTime.dinner && overTime.midnight){ %>
+            <div style="margin-top: 2rem;">
+                <p style="text-align: center; font-weight: 700; font-size: 2rem;">Order End</p>
+            </div>
         <% }else{ %>
-        value="Submit"
-        class="submit"
+            <input type="submit"
+            <% if(orderedInfo.length > 0){ %>
+            value="Edit"
+            class="edit"
+            <% }else{ %>
+            value="Submit"
+            class="submit"
+            <% } %>
+            >
         <% } %>
-        >
     </form>
     <% if(orderedInfo.length > 0){ %>
     <form action="/order?_method=DELETE" method="POST">

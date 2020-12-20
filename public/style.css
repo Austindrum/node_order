@@ -409,6 +409,7 @@ li{
 }
 .message.warning{
   background-color: #FFA500;
+  color: black;
 }
 /* Order Form */
 .order-form > h1{
@@ -450,4 +451,27 @@ li{
 .order-info > div .meal{
   display: grid;
   grid-template-columns: 40% 60%;
+}
+/* Shopes */
+.shops .shop{
+  padding: 1rem;
+  border-bottom: 2px solid #243a6f;
+}
+.shops .shop h2{
+  font-weight: 600;
+  text-shadow: #696969 1px 1px 1px;
+}
+/* Meals */
+.meals table, .meals td, .meals th{
+  border: 1px solid black;
+  padding: 1px 8px;
+} 
+.meals table{
+  border-collapse: collapse;
+}
+.meals table thead tr th{
+  text-align: left;
+}
+.meals table tbody .price{
+  text-align: right;
 }

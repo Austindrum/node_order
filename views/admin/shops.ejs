@@ -1,0 +1,11 @@
+<%- include("../partials/header"); %>
+<div class="container shops">
+    <% shops.forEach(shop=>{ %>
+    <div class="shop">
+        <h2><%= shop.name %></h2>
+        <p><strong>Address: </strong> <%= shop.address %></p>
+        <p><strong>Tel: </strong> <%= shop.tel %></p>
+    </div>
+    <% }) %>
+</div>
+<%- include("../partials/footer"); %>

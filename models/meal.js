@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      Meal.belongsTo(models.Shop);
       Meal.belongsToMany(models.Date, {
         as: "date",
         through: {model: models.DateMeal},
@@ -25,7 +26,8 @@ module.exports = (sequelize, DataTypes) => {
   Meal.init({
     name: DataTypes.STRING,
     price: DataTypes.INTEGER,
-    type: DataTypes.STRING
+    type: DataTypes.STRING,
+    ShopId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Meal',

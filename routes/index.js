@@ -2,12 +2,49 @@ const db = require("../models");
 const moment =require("moment");
 const User = db.User;
 const Date = db.Date;
+const Shop = db.Shop;
 const Meal = db.Meal;
 const Order = db.Order;
 const OrderMeal = db.OrderMeal;
 const url = require('url');
 const passport = require("../config/passport");
 const bcrypt = require("bcryptjs");
+
+const authenticated = (req, res, next) => {
+    if(req.isAuthenticated()){
+        return next();
+    }else{
+        req.flash("error_message", "Login First Please!");
+        return res.redirect("/signin");
+    }
+}
+
+const authenticatedAdmin = (req, res, next) => {
+    if(req.isAuthenticated()){
+        if(req.user.id === 3){
+            return next();
+        }else{
+            req.flash("warning_message", "Sorry, You aren't Admin");
+            return res.redirect("/order");
+        }
+    }else{
+        req.flash("error_message", "Login First Please!");
+        return res.redirect("/signin");
+    }
+}
+
+const isLogin = (req, res, next) => {
+    if(req.isAuthenticated()){
+        if(req.user.id === 3){
+            return res.redirect("/shops");
+        }else{
+            return res.redirect("/order");
+        }
+    }else{
+        return next();
+    }
+}
+
 // get date meals
 async function getDateMeals(targetDate, userId, res){
     let target = await Date.findAll({
@@ -48,21 +85,31 @@ async function getDateMeals(targetDate, userId, res){
     })
     const meals = datemeals.toJSON().meal;
     const date = datemeals.toJSON().date;
-    return res.render("order", { meals, date, orderedInfo, ordersDate});
+    const dateTime = {
+        breakfast: `${date}T20:29:59+08:00`,
+        dinner: `${date}T16:29:59+08:00`,
+        midnight: `${date}T20:29:59+08:00`
+    };
+    const overTime = {
+        breakfast: moment(dateTime.breakfast).valueOf() < moment().valueOf(),
+        dinner: moment(dateTime.dinner).valueOf() < moment().valueOf(),
+        midnight: moment(dateTime.midnight).valueOf() < moment().valueOf(),
+    }
+    return res.render("order", { meals, date, overTime, orderedInfo, ordersDate});
 }
 
 module.exports = (app) => {
-    app.get("/", (req, res)=>{
+    app.get("/", authenticatedAdmin, (req, res)=>{
         if(req.user.work_id === "P0000"){
             return res.redirect("/orderform");
         }else{
             return res.redirect("/order");
         }
     })
-    app.get("/signin", (req, res)=>{
+    app.get("/signin", isLogin, (req, res)=>{
         return res.render("signin");
     })
-    app.post("/signin", 
+    app.post("/signin", isLogin,
     passport.authenticate('local', {
         failureRedirect: "signin",
         failureFlash: true,
@@ -72,7 +119,7 @@ module.exports = (app) => {
             return res.redirect("/orderform");
         }else{
             if(req.user.isFirstLogin){
-                req.flash("warning_message", "First Login! Suggest You Change Your Password!");
+                req.flash("warning_message", "First Login! Suggest Change Your Password!");
                 return res.redirect("/user");
             }else{
                 req.flash("success_message", "Login Success");
@@ -80,10 +127,10 @@ module.exports = (app) => {
             }
         }
     })
-    app.get("/user", (req, res)=>{
+    app.get("/user", authenticated, (req, res)=>{
         return res.render("profile");
     })
-    app.put("/user", (req, res)=>{
+    app.put("/user", authenticated, (req, res)=>{
         const currentPassword = req.body.current_password;
         const newPassword = req.body.new_password;
         User.findByPk(req.user.id)
@@ -103,7 +150,7 @@ module.exports = (app) => {
             }
         })
     })
-    app.get("/history", async (req, res)=>{
+    app.get("/history", authenticated, async (req, res)=>{
         let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
         await User.findByPk(req.user.id, {
             include: [
@@ -156,14 +203,14 @@ module.exports = (app) => {
         })
         .catch(err => console.log(err))
     })
-    app.get("/order/:date", (req, res)=>{
+    app.get("/order/:date", authenticated, (req, res)=>{
         getDateMeals(req.params.date, req.user.id, res)
     })
-    app.get("/order", (req, res) => {
+    app.get("/order", authenticated, (req, res) => {
         let today = moment().format().slice(0, 10);
         getDateMeals(today, req.user.id, res)
     });
-    app.post("/order", async (req, res)=>{
+    app.post("/order", authenticated, async (req, res)=>{
         if(req.body.breakfast || req.body.dinner || req.body.midnight){
             await Order.create({
                 UserId: req.user.id,
@@ -177,7 +224,7 @@ module.exports = (app) => {
         req.flash("success_message", "Order Create Success");
         return res.redirect(`/order/${req.body.date}`);
     })
-    app.put("/order", async (req, res)=>{
+    app.put("/order", authenticated, async (req, res)=>{
         if(req.body.breakfast || req.body.dinner || req.body.midnight){
             OrderMeal.destroy({
                 where: {
@@ -195,7 +242,7 @@ module.exports = (app) => {
             })
         }
     })
-    app.delete("/order", async (req, res)=>{
+    app.delete("/order", authenticated, async (req, res)=>{
         await OrderMeal.destroy({
             where: {
                 OrderId: req.body.orderId
@@ -209,7 +256,16 @@ module.exports = (app) => {
         req.flash("error_message", "Delete Success");
         return res.redirect(`/order/${req.body.date}`);
     })
-    app.get("/orderform", async (req, res)=>{
+
+    // ADMIN
+    app.get("/shops", authenticatedAdmin, async(req, res)=>{
+        const shops = await Shop.findAll({
+            raw: true,
+            nest: true
+        })
+        res.render("admin/shops", { shops });
+    })
+    app.get("/orderform", authenticatedAdmin, async (req, res)=>{
         const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
         let current_url = new URL(fullUrl);
         let searchEmpty = current_url.search === "";
@@ -252,15 +308,25 @@ module.exports = (app) => {
         }
         return res.render("admin/orderform", { orders, targetDate });
     })
-    app.get("/meals", async (req, res)=>{
+    app.get("/meals", authenticatedAdmin, async (req, res)=>{
         let data = await Meal.findAll({
             raw: true,
-            nest: true
+            nest: true,
+            include: [
+                { model: Shop }
+            ]
         });
+        data.sort((a, b)=>{
+            return moment(a.Shop.id) - moment(b.Shop.id);
+        })
         return res.render("admin/meals", { data });
     })
     app.get("/logout", (req, res)=>{
         req.logout();
         res.redirect("/signin");
+    })
+    app.get("/*", (req, res)=>{
+        console.log(123)
+        res.redirect("/");
     })
 }
