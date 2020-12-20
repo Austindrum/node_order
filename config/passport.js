@@ -14,12 +14,12 @@ passport.use(new LocalStrategy(
     User.findOne({ where: { work_id: username } })
     .then(user=>{
         if(!user) {
-            return done(null, false, console.log("user not find"));
+            return done(null, false, req.flash("error_message", "User Not Find!"));
         }
         return bcrypt.compare(password, user.password)
         .then(isMatch => {
             if(!isMatch) {
-                return done(null, false, console.log("password inccorect"));
+                return done(null, false, req.flash("error_message", "Password inccorect"));
             }
             return done(null, user)
         })

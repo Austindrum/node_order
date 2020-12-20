@@ -135,14 +135,28 @@ Cal.prototype.showMonth = function(y, m) {
     // Write HTML to the div
     document.getElementById(this.divId).innerHTML = html;
 };
+var isChange = false;
 // On Load of the window
 window.onload = function() {
     // Start calendar
-    var c = new Cal("divCal");			
+    var c = new Cal("divCal");
+
     c.showcurr();
     
     // Bind next and previous button clicks
 
+    $("select").on("change", function(){
+        isChange = true;
+    })
+    $(window).bind('beforeunload', function (e){
+        if(isChange){
+            return true;
+        }
+    })
+    $("input:submit").click(function(){
+        $(window).unbind('beforeunload');
+    })
+    
     getId('btnNext').onclick = function() {
         c.nextMonth();
     };

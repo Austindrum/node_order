@@ -1,11 +1,51 @@
 <%- include("../partials/header"); %>
-<div class="container">
-    <h1>Order Form</h1>
-    <h2><%= today %></h2>
-    <ul>
-        <% orders.forEach(order=>{ %>
-            <li><%= order.User.work_id %> - <%= order.meal.name %> - <%= order.meal.price %> - <%= order.meal.type %></li>
-        <% }) %>
-    </ul>
+<div class="container order-form">
+    <form action="/orderform" method="GET" class="order-date">
+        <input type="date" name="date">
+        <input type="submit" value="Search">
+    </form>
+    <h1><%= targetDate %></h1>
+    <div class="order-info">
+        <div class="breakfast">
+            <h3>Breakfast</h3>
+            <div class="meals">
+            <% orders.forEach(order=>{ %>
+                <% if(order.meal.type === "b"){ %>        
+                    <div class="meal">
+                        <div><%= order.User.work_id %></div>
+                        <div><%= order.meal.name %></div>
+                    </div>
+                <% } %>
+            <% }) %>
+            </div>
+        </div>
+        <div class="dinner">
+            <h3>Dinner</h3>
+            <div class="meals">
+            <% orders.forEach(order=>{ %>
+                <% if(order.meal.type === "d"){ %>        
+                    <div class="meal">
+                        <div><%= order.User.work_id %></div>
+                        <div><%= order.meal.name %></div>
+                    </div>
+                <% } %>
+            <% }) %>
+            </div>
+        </div>
+        <div class="midnight">
+            <h3>Midnight</h3>
+            <div class="meals">
+            <% orders.forEach(order=>{ %>
+                <% if(order.meal.type === "m"){ %>        
+                    <div class="meal">
+                        <div><%= order.User.work_id %></div>
+                        <div><%= order.meal.name %></div>
+                    </div>
+                <% } %>
+            <% }) %>
+            </div>
+        </div>
+    </div>
 </div>
+<script src="/orderform.js"></script>
 <%- include("../partials/footer"); %>

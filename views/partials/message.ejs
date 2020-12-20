@@ -1,0 +1,27 @@
+<% if(success_message.length > 0){ %>
+    <div class="message success">
+        <p><%= success_message %></p>
+        <span class="close-message">
+            <i class="fas fa-times"></i>
+        </span>
+    </div>
+    <script src="/message.js"></script>
+<% } %>
+<% if(warning_message.length > 0){ %>
+    <div class="message warning">
+        <p><%= warning_message %></p>
+        <span class="close-message">
+            <i class="fas fa-times"></i>
+        </span>
+    </div>
+    <script src="/message.js"></script>
+<% } %>
+<% if(error_message.length > 0){ %>
+    <div class="message error">
+        <p><%= error_message %></p>
+        <span class="close-message">
+            <i class="fas fa-times"></i>
+        </span>
+    </div>
+    <script src="/message.js"></script>
+<% } %>
