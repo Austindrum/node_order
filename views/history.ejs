@@ -23,15 +23,19 @@
             <div class="name"><strong>Name</strong></div>
             <div class="price"><strong>Price</strong></div>
         </div>
-        <% data.forEach(d => { %>
-        <div class="date-data">
-            <% d.meal.forEach(m => { %>
-                <div class="date"><%= d.date %></div>
-                <div class="name"><%= m.name %></div>
-                <div class="meal-price"><%= m.price %></div>
+        <% if(data.length > 0){ %>
+            <% data.forEach(d => { %>
+            <div class="date-data">
+                <% d.meal.forEach(m => { %>
+                    <div class="date"><%= d.date %></div>
+                    <div class="name"><%= m.name %></div>
+                    <div class="meal-price"><%= m.price %></div>
+                <% }); %>
+            </div>
             <% }); %>
-        </div>
-        <% }); %>
+        <% }else{ %>
+            <div>Please Confirm Date Scoped</div>
+        <% } %>
         <div class="total-price">
             <div>Total</div>
             <div class="price" id="price">0</div>

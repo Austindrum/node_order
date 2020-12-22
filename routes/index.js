@@ -82,10 +82,9 @@ async function getDateMeals(targetDate, userId, res){
     if(target.length > 0){
         const dateId = target[0].id;
         const datemeals = await Date.findByPk(dateId, {
-            include: [{
-                model: Meal,
-                as: "meal"
-            }]
+            include: [
+                { model: Meal, as: "meal" }
+            ]
         })
         const meals = datemeals.toJSON().meal;
         const date = datemeals.toJSON().date;
@@ -121,6 +120,8 @@ module.exports = (app) => {
             return res.redirect("/order");
         }
     })
+
+    // user login
     app.get("/signin", isLogin, (req, res)=>{
         return res.render("signin");
     })
@@ -142,6 +143,8 @@ module.exports = (app) => {
             }
         }
     })
+
+    // user edit password
     app.get("/user", authenticated, (req, res)=>{
         return res.render("profile");
     })
@@ -158,42 +161,45 @@ module.exports = (app) => {
                 user.update({
                     password: bcrypt.hashSync(newPassword, bcrypt.genSaltSync(10), null),
                     isFirstLogin: false
-                }).then(user=>{
+                }).then(()=>{
                     req.flash("success_message", "User Update Success");
                     return res.redirect("/order");
                 })
+                .catch(err=>console.log(err))
             }
         })
+        .catch(err=>console.log(err))
     })
+
+    // user history
     app.get("/history", authenticated, async (req, res)=>{
-        let fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+        const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
         await User.findByPk(req.user.id, {
             include: [
                 {
                     model: Order,
                     include: [
-                        { 
-                            model: Meal,
-                            as: "meal"
-                        }
+                        { model: Meal, as: "meal" }
                     ]
                 }
             ]
         }).then(user=>{
-            let current_url = new URL(fullUrl);
-            let searchEmpty = current_url.search === "";
-            let orders = user.toJSON().Orders;
+            const current_url = new URL(fullUrl);
+            const searchEmpty = current_url.search === "";
+            const orders = user.toJSON().Orders;
+            const today = moment().format().slice(0, 10);
             let data = [];
             let targetDay = "";
+            // user history today
             if(searchEmpty){
-                let today = moment().format().slice(0, 10);
                 data = orders.filter(order => order.date === today);
                 targetDay = today;
+                return res.render("history", { data, targetDay });
+            // user history target date
             }else{
-                let from = current_url.searchParams.get("from");
-                let to = current_url.searchParams.get("to");
+                const from = current_url.searchParams.get("from");
+                const to = current_url.searchParams.get("to");
                 if(!from && !to){
-                    console.log("None Date");
                     return res.render("history", { data, targetDay });
                 }
                 if(from && !to){
@@ -202,7 +208,6 @@ module.exports = (app) => {
                     return res.render("history", { data, targetDay });
                 }
                 if(!from && to){
-                    console.log("None From");
                     return res.render("history", { data, targetDay });
                 }
                 if(from && to){
@@ -214,15 +219,16 @@ module.exports = (app) => {
                     return res.render("history", { data, targetDay });
                 }
             }
-            return res.render("history", { data, targetDay });
         })
         .catch(err => console.log(err))
     })
+    
+    // user order CRUD
     app.get("/order/:date", authenticated, (req, res)=>{
         getDateMeals(req.params.date, req.user.id, res)
     })
     app.get("/order", authenticated, (req, res) => {
-        let today = moment().format().slice(0, 10);
+        const today = moment().format().slice(0, 10);
         getDateMeals(today, req.user.id, res)
     });
     app.post("/order", authenticated, async (req, res)=>{
@@ -230,44 +236,52 @@ module.exports = (app) => {
             await Order.create({
                 UserId: req.user.id,
                 date: req.body.date
-            }).then(async order=>{
+            })
+            .then(async order=>{
                 if(req.body.breakfast) await OrderMeal.create({ OrderId: order.id, MealId: req.body.breakfast });
                 if(req.body.dinner) await OrderMeal.create({ OrderId: order.id, MealId: req.body.dinner });
                 if(req.body.midnight) await OrderMeal.create({ OrderId: order.id, MealId: req.body.midnight });
             })
-        }
-        req.flash("success_message", "Order Create Success");
-        return res.redirect(`/order/${req.body.date}`);
-    })
-    app.put("/order", authenticated, async (req, res)=>{
-        if(req.body.breakfast || req.body.dinner || req.body.midnight){
-            OrderMeal.destroy({
-                where: {
-                    OrderId: req.body.orderId
-                }
-            })
-            .then(async ()=>{
-                if(req.body.breakfast) await OrderMeal.create({ OrderId: req.body.orderId, MealId: req.body.breakfast });
-                if(req.body.dinner) await OrderMeal.create({ OrderId: req.body.orderId, MealId: req.body.dinner });
-                if(req.body.midnight) await OrderMeal.create({ OrderId: req.body.orderId, MealId: req.body.midnight });
-            })
             .then(()=>{
-                req.flash("success_message", "Edit Success");
+                req.flash("success_message", "Order Create Success");
                 return res.redirect(`/order/${req.body.date}`);
             })
+            .catch(err=>console.log(err))
+        }else{
+            req.flash("error_message", "Please Select An Meal");
+            return res.redirect(`/order/${req.body.date}`);
         }
+    })
+    app.put("/order", authenticated, async (req, res)=>{
+        OrderMeal.destroy({
+            where: {
+                OrderId: req.body.orderId
+            }
+        })
+        .then(async ()=>{
+            if(req.body.breakfast) await OrderMeal.create({ OrderId: req.body.orderId, MealId: req.body.breakfast });
+            if(req.body.dinner) await OrderMeal.create({ OrderId: req.body.orderId, MealId: req.body.dinner });
+            if(req.body.midnight) await OrderMeal.create({ OrderId: req.body.orderId, MealId: req.body.midnight });
+        })
+        .then(()=>{
+            req.flash("success_message", "Edit Success");
+            return res.redirect(`/order/${req.body.date}`);
+        })
+        .catch(err => console.log(err))
     })
     app.delete("/order", authenticated, async (req, res)=>{
         await OrderMeal.destroy({
             where: {
                 OrderId: req.body.orderId
             }
-        });
+        })
+        .catch(err=>console.log(err));
         await Order.destroy({
             where: {
                 id: req.body.orderId
             }
-        });
+        })
+        .catch(err=>console.log(err));
         req.flash("error_message", "Delete Success");
         return res.redirect(`/order/${req.body.date}`);
     })
