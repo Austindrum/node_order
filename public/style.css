@@ -170,28 +170,34 @@ li{
     background-color: #fc7c7c;
     color: white;
   }
-  .order .calendar-wrapper {
+  .order .calendar-wrapper,
+  .meals .calendar-wrapper{
     position: relative;
     max-width:420px;
     margin:1em auto;
     border-radius:5px;
     background:#fff;
   }
-  .order .calendar-wrapper #btnPrev {
+  .order .calendar-wrapper #btnPrev,
+  .meals .calendar-wrapper #btnPrev 
+  {
     position: absolute;
     top: 1.8rem;
     left: 1.2rem;
   }
-  .order .calendar-wrapper #btnPrev:before{
+  .order .calendar-wrapper #btnPrev:before,
+  .meals .calendar-wrapper #btnPrev:before{
     content:'<';
     padding-right:4px;
   }
-  .order .calendar-wrapper #btnNext {
+  .order .calendar-wrapper #btnNext,
+  .meals .calendar-wrapper #btnNext {
     position: absolute;
     top: 1.8rem;
     right: 1.2rem;
   }
-  .order .calendar-wrapper #btnNext:after{
+  .order .calendar-wrapper #btnNext:after,
+  .meals .calendar-wrapper #btnNext:after{
     content:'>';
     padding-right:4px;
   }
@@ -205,27 +211,31 @@ li{
     text-transform:uppercase;
     transition:all 0.3s ease;
   }
-  .order table {
-    clear:both;
+  .order table,
+  .meals table {
+    clear: both;
     width:100%;
     border:1px solid rgb(220,220,255);
     border-radius:3px;
     border-collapse:collapse;
     color:#444;
   }
-  .order table td {
+  .order table td,
+  .meals table td {
     font-size: 1.5rem;
     height:48px;
     text-align:center;
     vertical-align:middle;
-    border-right:1px solid rgb(220,220,255);
-    border-top:1px solid rgb(220,220,255);
+    /* border-right:1px solid rgb(220,220,255);
+    border-top:1px solid rgb(220,220,255); */
     width: 60px;
   }
-  .order table tbody td {
+  .order table tbody td,
+  .meals table tbody td {
     position: relative;
   }
-  .order table tbody td.today {
+  .order table tbody td.today,
+  .meals table tbody td.today {
     font-weight:700;
     color:white;
     background-color: #fc7c7c;
@@ -242,13 +252,15 @@ li{
     border-radius: 50%;
 
   }
-  .order table thead td {
+  .order table thead td,
+  .meal table thead td {
     border:none;
     color:rgb(40,40,59);
     text-transform:uppercase;
     font-size:2rem;
   }
-  .order table td.not-current {
+  .order table td.not-current,
+  .meals table td.not-current {
     color:#c0c0c0;
   }
 }
@@ -474,4 +486,26 @@ li{
 }
 .meals table tbody .price{
   text-align: right;
+}
+
+/* Create Meal */
+.section{
+  margin-bottom: 1rem;
+}
+.section .head{
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid #ff4584;
+  padding-bottom: 1rem;
+  margin-bottom: 1.2rem;
+}
+.section .head span{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid black;
+  border-radius: 50%;
+  padding: 0.5rem;
+  background-color: #fff;
+  cursor: pointer;
 }

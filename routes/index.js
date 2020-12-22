@@ -2,11 +2,11 @@ const db = require("../models");
 const moment =require("moment");
 const User = db.User;
 const Date = db.Date;
+const DateMeal = db.DateMeal;
 const Shop = db.Shop;
 const Meal = db.Meal;
 const Order = db.Order;
 const OrderMeal = db.OrderMeal;
-const url = require('url');
 const passport = require("../config/passport");
 const bcrypt = require("bcryptjs");
 
@@ -47,19 +47,7 @@ const isLogin = (req, res, next) => {
 
 // get date meals
 async function getDateMeals(targetDate, userId, res){
-    let target = await Date.findAll({
-        raw: true,
-        nest: true,
-        where: { date: targetDate },
-    })
-    let dateId = target[0].id;
-    let datemeals = await Date.findByPk(dateId, {
-        include: [{
-            model: Meal,
-            as: "meal"
-        }]
-    })
-    let orderedInfo = await User.findByPk(userId, {
+    const orderedInfo = await User.findByPk(userId, {
         include: [
             { 
                 model: Order,
@@ -71,7 +59,8 @@ async function getDateMeals(targetDate, userId, res){
     }).then(user => {
         return user.toJSON().Orders.filter(order => order.date === targetDate);
     })
-    let ordersDate = await User.findByPk(userId, {
+
+    const ordersDate = await User.findByPk(userId, {
         include: [
             { 
                 model: Order,
@@ -83,19 +72,45 @@ async function getDateMeals(targetDate, userId, res){
     }).then(user=>{
         return user.toJSON().Orders.map(order => order.date);
     })
-    const meals = datemeals.toJSON().meal;
-    const date = datemeals.toJSON().date;
-    const dateTime = {
-        breakfast: `${date}T20:29:59+08:00`,
-        dinner: `${date}T16:29:59+08:00`,
-        midnight: `${date}T20:29:59+08:00`
-    };
-    const overTime = {
-        breakfast: moment(dateTime.breakfast).valueOf() < moment().valueOf(),
-        dinner: moment(dateTime.dinner).valueOf() < moment().valueOf(),
-        midnight: moment(dateTime.midnight).valueOf() < moment().valueOf(),
+
+    const target = await Date.findAll({
+        raw: true,
+        nest: true,
+        where: { date: targetDate },
+    })
+
+    if(target.length > 0){
+        const dateId = target[0].id;
+        const datemeals = await Date.findByPk(dateId, {
+            include: [{
+                model: Meal,
+                as: "meal"
+            }]
+        })
+        const meals = datemeals.toJSON().meal;
+        const date = datemeals.toJSON().date;
+        const dateTime = {
+            breakfast: `${date}T20:29:59+08:00`,
+            dinner: `${date}T16:29:59+08:00`,
+            midnight: `${date}T20:29:59+08:00`
+        };
+        const overTime = {
+            breakfast: moment(dateTime.breakfast).valueOf() < moment().valueOf(),
+            dinner: moment(dateTime.dinner).valueOf() < moment().valueOf(),
+            midnight: moment(dateTime.midnight).valueOf() < moment().valueOf(),
+        }
+        return res.render("order", { meals, date, overTime, orderedInfo, ordersDate});
+    }else{
+        const meals = [];
+        const date = targetDate;
+        const overTime = {
+            breakfast: false,
+            dinner: false,
+            midnight: false
+        };
+        return res.render("order", { meals, date, overTime, orderedInfo, ordersDate});
     }
-    return res.render("order", { meals, date, overTime, orderedInfo, ordersDate});
+
 }
 
 module.exports = (app) => {
@@ -308,25 +323,96 @@ module.exports = (app) => {
         }
         return res.render("admin/orderform", { orders, targetDate });
     })
-    app.get("/meals", authenticatedAdmin, async (req, res)=>{
-        let data = await Meal.findAll({
+    app.get("/meals/:date", authenticatedAdmin, async (req, res)=>{
+        const date = req.params.date;
+        let datemeals = await Date.findAll({
             raw: true,
             nest: true,
+            where: {
+                date: date,
+            },
             include: [
-                { model: Shop }
+                {
+                    model: Meal,
+                    as: "meal"
+                }
             ]
         });
-        data.sort((a, b)=>{
-            return moment(a.Shop.id) - moment(b.Shop.id);
-        })
-        return res.render("admin/meals", { data });
+        const meals = datemeals.map(data=> data.meal );
+        console.log(meals);
+        return res.render("admin/meals", { meals, date });
+    })
+    app.get("/meals", authenticatedAdmin, async (req, res)=>{
+        const date = moment().format().slice(0, 10);
+        const datemeals = await Date.findAll({
+            raw: true,
+            nest: true,
+            where: {
+                date: date,
+            },
+            include: [
+                {
+                    model: Meal,
+                    as: "meal"
+                }
+            ]
+        });
+        const meals = datemeals.map(data=> data.meal );
+        return res.render("admin/meals", { meals, date });
+    })
+    app.post("/meals", async (req, res)=>{
+        const date = await Date.create({
+            date: req.body.date
+        }).then(date => date.toJSON());
+        if(req.body.breakfastName.length > 0){
+            req.body.breakfastName.forEach( async(b, i)=>{
+                await Meal.create({
+                    name: b,
+                    price: req.body.breakfastPrice[i],
+                    type: "b"
+                }).then(async meal=>{
+                    await DateMeal.create({
+                        DateId: date.id,
+                        MealId: meal.toJSON().id
+                    })
+                })
+            })
+        }
+        if(req.body.dinnerName.length > 0){
+            req.body.dinnerName.forEach( async(d, i)=>{
+                await Meal.create({
+                    name: d,
+                    price: req.body.dinnerPrice[i],
+                    type: "d"
+                }).then(async meal=>{
+                    await DateMeal.create({
+                        DateId: date.id,
+                        MealId: meal.toJSON().id
+                    })
+                })
+            })
+        }
+        if(req.body.midnightName.length > 0){
+            req.body.midnightName.forEach( async(m, i)=>{
+                await Meal.create({
+                    name: m,
+                    price: req.body.midnightPrice[i],
+                    type: "m"
+                }).then(async meal=>{
+                    await DateMeal.create({
+                        DateId: date.id,
+                        MealId: meal.toJSON().id
+                    })
+                })
+            })
+        }
+        return res.redirect(`/meals/${date.date}`);
     })
     app.get("/logout", (req, res)=>{
         req.logout();
         res.redirect("/signin");
     })
-    app.get("/*", (req, res)=>{
-        console.log(123)
+    app.get("*", (req, res)=>{
         res.redirect("/");
     })
 }

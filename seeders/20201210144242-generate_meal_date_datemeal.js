@@ -17,7 +17,7 @@ function setType(){
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    queryInterface.bulkInsert('Users', [
+    return queryInterface.bulkInsert('Users', [
       {
         id: 0,
         work_id: "P1314",
@@ -67,51 +67,51 @@ module.exports = {
         updatedAt: new Date(),
       }
     ], {});
-    queryInterface.bulkInsert("Shops", Array.from({ length: 3 }).map((item, index) => 
-      ({
-        id: index + 1,
-        name: faker.company.companyName(),
-        tel: faker.phone.phoneNumber(),
-        address: faker.address.streetAddress(),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      })
-    ), {})
-    queryInterface.bulkInsert('Meals', Array.from({ length: 40 }).map((item, index) =>
-      ({
-        id: index + 1,
-        name: faker.commerce.productName(),
-        price: faker.commerce.price(),
-        type: setType(),
-        ShopId: Math.floor(Math.random() * 3) + 1,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      })
-    ), {});
-    queryInterface.bulkInsert('Dates', Array.from({ length: 60 }).map((item, index) =>
-      ({
-        id: index + 1,
-        date: setDate(index),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      })
-    ), {});
-    return queryInterface.bulkInsert('DateMeals', Array.from({ length: 200 }).map((item, index) =>
-      ({
-        id: index + 1,
-        DateId: Math.floor(Math.random() * 60)+1,
-        MealId: Math.floor(Math.random() * 20)+1,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      })
-  ), {});
+    // queryInterface.bulkInsert("Shops", Array.from({ length: 3 }).map((item, index) => 
+    //   ({
+    //     id: index + 1,
+    //     name: faker.company.companyName(),
+    //     tel: faker.phone.phoneNumber(),
+    //     address: faker.address.streetAddress(),
+    //     createdAt: new Date(),
+    //     updatedAt: new Date(),
+    //   })
+    // ), {})
+    // queryInterface.bulkInsert('Meals', Array.from({ length: 40 }).map((item, index) =>
+    //   ({
+    //     id: index + 1,
+    //     name: faker.commerce.productName(),
+    //     price: faker.commerce.price(),
+    //     type: setType(),
+    //     ShopId: Math.floor(Math.random() * 3) + 1,
+    //     createdAt: new Date(),
+    //     updatedAt: new Date(),
+    //   })
+    // ), {});
+    // queryInterface.bulkInsert('Dates', Array.from({ length: 60 }).map((item, index) =>
+    //   ({
+    //     id: index + 1,
+    //     date: setDate(index),
+    //     createdAt: new Date(),
+    //     updatedAt: new Date(),
+    //   })
+    // ), {});
+  //   return queryInterface.bulkInsert('DateMeals', Array.from({ length: 200 }).map((item, index) =>
+  //     ({
+  //       id: index + 1,
+  //       DateId: Math.floor(Math.random() * 60)+1,
+  //       MealId: Math.floor(Math.random() * 20)+1,
+  //       createdAt: new Date(),
+  //       updatedAt: new Date(),
+  //     })
+  // ), {});
   },
 
   down: async (queryInterface, Sequelize) => {
-    queryInterface.bulkDelete('Users', null, {});
-    queryInterface.bulkDelete('Shops', null, {});
-    queryInterface.bulkDelete('Meals', null, {});
-    queryInterface.bulkDelete('Dates', null, {});
-    return queryInterface.bulkDelete('DateMeals', null, {});
+    return queryInterface.bulkDelete('Users', null, {});
+    // queryInterface.bulkDelete('Shops', null, {});
+    // queryInterface.bulkDelete('Meals', null, {});
+    // queryInterface.bulkDelete('Dates', null, {});
+    // return queryInterface.bulkDelete('DateMeals', null, {});
   }
 };

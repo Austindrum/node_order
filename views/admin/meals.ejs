@@ -1,32 +1,79 @@
 <%- include("../partials/header"); %>
 <div class="container meals">
-    <table>
-        <thead>
-            <tr>
-                <th>Shop</th>
-                <th>Meal Name</th>
-                <th>Price</th>
-                <th>Type</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% data.forEach(meal=>{ %>
-                <tr>
-                    <td><%= meal.Shop.name %></td>
-                    <td><%= meal.name %></td>
-                    <td class="price"><%= meal.price %></td>
-                    <td>
+    <div class="calendar-wrapper">
+        <button id="btnPrev" type="button">Prev</button>
+        <button id="btnNext" type="button">Next</button>
+        <div id="divCal"></div>
+    </div>
+    <h1><%= date %></h1>
+    <div class="create-meal">
+        <form action="/meals" method="POST">
+            <input 
+            type="text"
+            style="display: none;"
+            id="date"
+            name="date"
+            value="<%= date %>">
+            <div class="section">
+                <div class="head">
+                    <h2>Breakfast</h2>
+                    <span class="breakfast-plus">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                </div>
+                <div class="breakfast-contain">
+                    <% meals.forEach(meal=>{ %>
                         <% if(meal.type === "b"){ %>
-                            Breakfast
-                        <% }else if(meal.type === "d"){ %>
-                            Dinner
-                        <% }else{ %>
-                            Midnight
+                            <div><%= meal.name %> - <%= meal.price %></div>
                         <% } %>
-                    </td>
-                </tr>    
-            <% }) %>
-        </tbody>
-    </table>
+                    <% }) %>
+                    <div class="contain">
+                        <input type="text" placeholder="name" name="breakfastName[]">
+                        <input type="number" placeholder="price" name="breakfastPrice[]">
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="head">
+                    <h2>Dinner</h2>
+                    <span class="dinner-plus">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                </div>
+                <div class="dinner-contain">
+                    <% meals.forEach(meal=>{ %>
+                        <% if(meal.type === "d"){ %>
+                            <div><%= meal.name %> - <%= meal.price %></div>
+                        <% } %>
+                    <% }) %>
+                    <div class="contain">
+                        <input type="text" placeholder="name" name="dinnerName[]">
+                        <input type="number" placeholder="price" name="dinnerPrice[]">
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <div class="head">
+                    <h2>Midnight</h2>
+                    <span class="midnight-plus">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                </div>
+                <div class="midnight-contain">
+                    <% meals.forEach(meal=>{ %>
+                        <% if(meal.type === "m"){ %>
+                            <div><%= meal.name %> - <%= meal.price %></div>
+                        <% } %>
+                    <% }) %>
+                    <div class="contain">
+                        <input type="text" placeholder="name" name="midnightName[]">
+                        <input type="number" placeholder="price" name="midnightPrice[]">
+                    </div>
+                </div>
+            </div>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
 </div>
+<script src="/meal.js"></script>
 <%- include("../partials/footer"); %>
