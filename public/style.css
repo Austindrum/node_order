@@ -38,6 +38,12 @@ li{
   max-width: 120rem;
   margin: 0 auto;
   padding: 2rem;
+  height: 93%;
+  margin-bottom: -50px;
+}
+
+.push{
+  height: 50px;
 }
 .container-md{
   max-width: 100rem;
@@ -55,7 +61,7 @@ li{
 }
 /* Nav */
 .nav{
-  
+
 }
 .navigation{
   display: flex;
@@ -77,6 +83,20 @@ li{
 .nav-list{
   display: flex;
   align-items: center;
+}
+footer{
+  /* height: 50px; */
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #243a6f;
+  color: white;
+  font-size: 2rem;
+}
+footer p {
+  text-align: center;
+  line-height: 50px;
+  height: 100%;
 }
 @media only screen and (max-width: 768px){
   body.show::before{
@@ -161,40 +181,80 @@ li{
   .order input[type="submit"].submit{
     background-color: #243a6f;
     color: white;
+    margin-bottom: 1.5rem;
   }
   .order input[type="submit"].edit{
     background-color: #4CAF50;
     color: white;
   }
   .order input[type="submit"].delete{
+    margin-bottom: 10px;
     background-color: #fc7c7c;
     color: white;
+  }
+  .order h2{
+    text-align: center;
+  }
+  .order span.info{
+    text-align: center;
+    font-size: 0.5rem;
+    display: block;
+    text-align: center;
   }
   .order .calendar-wrapper,
   .meals .calendar-wrapper{
     position: relative;
     max-width:420px;
-    margin:1em auto;
+    margin: 0 auto;
+    /* margin-top: 2rem; */
     border-radius:5px;
-    background:#fff;
+    /* box-shadow: 1px 1px 1px rgb(220,220,255); */
+    /* background:#fff; */
   }
-  .order .calendar-wrapper #btnPrev,
-  .meals .calendar-wrapper #btnPrev 
-  {
+  .order .calendar-wrapper{
+    padding-bottom: 8rem;
+  }
+  .order .calendar-wrapper .calendar-head{
+    background-color: #243a6f;
+    color: #fff;
+    border-radius: 10px 10px 0px 0px;
+  }
+  .order .calendar-wrapper #btnPrev{
     position: absolute;
-    top: 1.8rem;
+    top: 4.5rem;
     left: 1.2rem;
+    font-size: 1.5rem;
+    padding-bottom: 1px;
+    border-bottom: 1px solid white
+  }
+  .meals .calendar-wrapper #btnPrev{
+    position: absolute;
+    top: 1.5rem;
+    left: 1.2rem;
+    font-size: 1.5rem;
+    padding-bottom: 1px;
+    color: black;
   }
   .order .calendar-wrapper #btnPrev:before,
   .meals .calendar-wrapper #btnPrev:before{
     content:'<';
     padding-right:4px;
   }
-  .order .calendar-wrapper #btnNext,
-  .meals .calendar-wrapper #btnNext {
+  .order .calendar-wrapper #btnNext{
     position: absolute;
-    top: 1.8rem;
+    top: 4.5rem;
     right: 1.2rem;
+    font-size: 1.5rem;
+    padding-bottom: 1px;
+    border-bottom: 1px solid white;
+  }
+  .meals .calendar-wrapper #btnNext{
+    position: absolute;
+    top: 1.5rem;
+    right: 1.2rem;
+    font-size: 1.5rem;
+    padding-bottom: 1px;
+    color: black;  
   }
   .order .calendar-wrapper #btnNext:after,
   .meals .calendar-wrapper #btnNext:after{
@@ -206,10 +266,23 @@ li{
     border:none;
     outline:none;
     font-size:1rem;
-    color:black;
+    color:white;
     cursor:pointer;
     text-transform:uppercase;
     transition:all 0.3s ease;
+  }
+  .order .calendar-wrapper .prompt{
+    display: flex;
+  }
+  .order .calendar-wrapper .prompt .light{
+    display: block;
+    margin-top: 10px;
+    margin-right: 10px;
+    width: 7px;
+    height: 7px;
+    background-color: rgb(64, 255, 0);
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    border-radius: 50%;
   }
   .order table,
   .meals table {
@@ -223,7 +296,7 @@ li{
   .order table td,
   .meals table td {
     font-size: 1.5rem;
-    height:48px;
+    height:36px;
     text-align:center;
     vertical-align:middle;
     /* border-right:1px solid rgb(220,220,255);
@@ -250,7 +323,6 @@ li{
     background-color:rgb(64, 255, 0);
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     border-radius: 50%;
-
   }
   .order table thead td,
   .meal table thead td {
@@ -265,6 +337,16 @@ li{
   }
 }
 /* Signin */
+.signin .lang{
+  text-align: center;
+}
+.signin .lang span{
+  margin: 0 10px;
+}
+.signin .lang .active{
+  font-weight: 700;
+  color: #ff4584;
+}
 .form-box{
   width: 80%;
   margin: 1rem auto;
@@ -356,18 +438,34 @@ li{
   font-size: 3rem;
   color: #243a6f;
   text-shadow: #696969 1px 1px 1px;
+  text-align: center;
 }
 .history-data .date-data{
   display: grid;
-  grid-template-columns: 30% 50% 20%;
+  grid-template-columns: 25% 30% 25% 20%;
   margin: 10px 0;
 }
 .history-data .date-data.head{
   font-size: 1.8rem;
   text-align: center;
 }
+.history-data .date-data{
+  align-items: center;
+}
+.history-data .date-data .meal-date,
+.history-data .date-data .meal-name,
+.history-data .date-data .meal-type{
+  text-align: center;
+
+}
 .history-data .date-data .meal-price{
   text-align: right;
+}
+.history-data .date-data .meal-date,
+.history-data .date-data .meal-name,
+.history-data .date-data .meal-type,
+.history-data .date-data .meal-price{
+  margin: 10px 0;
 }
 .history-data .total-price{
   font-weight: 700;
@@ -475,7 +573,7 @@ li{
 }
 /* Meals */
 .meals table, .meals td, .meals th{
-  border: 1px solid black;
+  /* border: 1px solid black; */
   padding: 1px 8px;
 } 
 .meals table{
@@ -489,6 +587,13 @@ li{
 }
 
 /* Create Meal */
+.meals .create-meal{
+  padding: 2rem;
+  padding-bottom: 80px;
+}
+.meals h1{
+  padding: 0 2rem;
+}
 .section{
   margin-bottom: 1rem;
 }
@@ -508,4 +613,11 @@ li{
   padding: 0.5rem;
   background-color: #fff;
   cursor: pointer;
+}
+.section .breakfast-contain .contain,
+.section .dinner-contain .contain,
+.section .midnight-contain .contain{
+  display: grid;
+  grid-template-columns: 41% 41% 18%;
+  grid-gap: 4px;
 }

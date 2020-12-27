@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   Meal.init({
     name: DataTypes.STRING,
+    en_name: DataTypes.STRING,
     price: DataTypes.INTEGER,
     type: DataTypes.STRING,
   }, {

@@ -14,7 +14,7 @@ var Cal = function(divId) {
       'Sat'
     ];
     // Months, stating on January
-    this.Months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
+    this.Months = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12' ];
     // Set the current month, year
     this.currMonth = parseInt(targetDay[1]) - 1;
     this.currYear = parseInt(targetDay[0]);
@@ -70,7 +70,7 @@ Cal.prototype.showMonth = function(y, m) {
 
     // Write selected month and year
     html += '<thead><tr>';
-    html += '<td colspan="7">' + this.Months[m] + ' ' + y + '</td>';
+    html += '<td colspan="7">'  + y + '-' + this.Months[m] + '</td>';
     html += '</tr></thead>';
 
     // Write the header of the days of the week

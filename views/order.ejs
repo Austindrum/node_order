@@ -26,14 +26,14 @@
         value="<%= date %>">
         <div class="info-block">
             <i class="fas fa-user fa-lg"></i>
-            <p><strong>ID</strong></p>
+            <p><strong><%= i18n.__("WORKID") %></strong></p>
             <span class="user-id"><%= user.work_id %></span>
         </div>
         <div class="info-block">
             <i class="fas fa-coffee fa-lg"></i>
-            <p><strong>Breakfast</strong></p>
+            <p><strong><%= i18n.__("BREAKFAST") %></strong></p>
             <select name="breakfast" <%= overTime.breakfast ? "disabled" : "" %>>
-                <option value="">select..</option>
+                <option value=""><%= i18n.__("SELECT") %>..</option>
                 <% meals.forEach(e => { %>
                     <% if(e.type === "b"){ %>
                         <option value="<%= e.id %>"
@@ -44,16 +44,16 @@
                                 <% } %>
                             <% }); %>
                         <% } %>
-                        ><%= e.name %></option>
+                        ><%= e.name %> - <%= e.en_name %></option>
                     <% } %>
                 <% }) %>
             </select>
         </div>
         <div class="info-block">
             <i class="fas fa-utensils fa-lg"></i>
-            <p><strong>Dinner</strong></p>
+            <p><strong><%= i18n.__("DINNER") %></strong></p>
             <select name="dinner" <%= overTime.dinner ? "disabled" : "" %>>
-                <option value="">select..</option>
+                <option value=""><%= i18n.__("SELECT") %>..</option>
                 <% meals.forEach(e => { %>
                     <% if(e.type === "d"){ %>
                         <option value="<%= e.id %>"
@@ -64,16 +64,16 @@
                                 <% } %>
                             <% }); %>
                         <% } %>
-                        ><%= e.name %></option>
+                        ><%= e.name %> - <%= e.en_name %></option>
                     <% } %>
                 <% }) %>
             </select>
         </div>
         <div class="info-block">
             <i class="fas fa-moon fa-lg"></i>
-            <p><strong>Midnight</strong></p>
+            <p><strong><%= i18n.__("MIDNIGHT") %></strong></p>
             <select name="midnight" <%= overTime.midnight ? "disabled" : "" %>>
-                <option value="">select..</option>
+                <option value=""><%= i18n.__("SELECT") %>..</option>
                 <% meals.forEach(e => { %>
                     <% if(e.type === "m"){ %>
                         <option value="<%= e.id %>"
@@ -84,29 +84,29 @@
                                 <% } %>
                             <% }); %>
                         <% } %>
-                        ><%= e.name %></option>
+                        ><%= e.name %> - <%= e.en_name %></option>
                     <% } %>
                 <% }) %>
             </select>
         </div>
         <% if(overTime.breakfast && overTime.dinner && overTime.midnight){ %>
-            <div style="margin-top: 2rem;">
-                <p style="text-align: center; font-weight: 700; font-size: 2rem;">Order End</p>
+            <div style="margin: 1rem 0;">
+                <p style="text-align: center; font-weight: 700; font-size: 2rem; color: #ff4584;"><%= i18n.__("ORDEREND") %></p>
             </div>
         <% }else{ %>
             <% if(meals.length > 0){ %>
                 <input type="submit"
                 <% if(orderedInfo.length > 0){ %>
-                value="Edit"
+                value="<%= i18n.__("EDIT") %>"
                 class="edit"
                 <% }else{ %>
-                value="Submit"
+                value="<%= i18n.__("SUBMIT") %>"
                 class="submit"
                 <% } %> 
                 >          
             <% }else{ %>
-                <div style="margin-top: 2rem;">
-                    <p style="text-align: center; font-weight: 700; font-size: 2rem;">Order Not Create</p>
+                <div style="margin: 1rem 0;">
+                    <p style="text-align: center; font-weight: 700; font-size: 2rem; color: #ff4584;"><%= i18n.__("ORDERNOTCREATE") %></p>
                 </div>
             <% } %>
         <% } %>
@@ -127,11 +127,19 @@
             data-date="<%= date %>"
             name="date"
             value="<%= date %>">
-            <input type="submit" class="delete" value="Delete" onclick="return confirm('Are you sure you want to delete this item?');">
+            <input type="submit" class="delete" value="<%= i18n.__("DELETE") %>" onclick="return confirm('Are you sure you want to delete this item?');">
         </form>
         <% } %>
     <% } %>
     <div class="calendar-wrapper">
+        <div class="prompt">
+            <span class="light"></span>
+            <span><%= i18n.__("ISORDER") %></span> 
+        </div>
+        <div class="calendar-head">
+            <h2><%= i18n.__("DATEORDER") %></h2>
+            <span class="info"><%= i18n.__("DATEORDER_PROMPT") %></span>
+        </div>
         <button id="btnPrev" type="button">Prev</button>
         <button id="btnNext" type="button">Next</button>
         <div id="divCal">

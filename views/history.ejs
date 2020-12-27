@@ -4,40 +4,48 @@
     <div class="date">
         <form action="/history" method="GET">
             <div class="history-block">
-                <p><strong>From</strong></p>
+                <p><strong><%= i18n.__("FROM") %></strong></p>
                 <input type="date" name="from">
             </div>
             <div class="history-block">
-                <p><strong>To</strong></p>
+                <p><strong><%= i18n.__("TO") %></strong></p>
                 <input type="date" name="to">
             </div>
             <div>
-                <input type="submit" value="Search">
+                <input type="submit" value="<%= i18n.__("SEARCH") %>">
             </div>
         </form>
     </div>
     <div class="history-data">
         <h2><%= targetDay %></h2>
         <div class="date-data head">
-            <div class="date"><strong>Date</strong></div>
-            <div class="name"><strong>Name</strong></div>
-            <div class="price"><strong>Price</strong></div>
+            <div class="date"><strong><%= i18n.__("ORDER_DATE") %></strong></div>
+            <div class="name"><strong><%= i18n.__("ORDER_NAME") %></strong></div>
+            <div class="type"><strong><%= i18n.__("ORDER_TYPE") %></strong></div>
+            <div class="price"><strong><%= i18n.__("ORDER_PRICE") %></strong></div>
         </div>
         <% if(data.length > 0){ %>
-            <% data.forEach(d => { %>
             <div class="date-data">
+            <% data.forEach(d => { %>
                 <% d.meal.forEach(m => { %>
-                    <div class="date"><%= d.date %></div>
-                    <div class="name"><%= m.name %></div>
-                    <div class="meal-price"><%= m.price %></div>
+                    <div class="meal-date"><%= d.date %></div>
+                    <div class="meal-name"><%= m.name %><br/><%= m.en_name %></div>
+                    <% if(m.type === "b"){ %>
+                        <div class="meal-type"><%= i18n.__("BREAKFAST") %></div>
+                    <% }else if(m.type === "d"){ %>
+                        <div class="meal-type"><%= i18n.__("DINNER") %></div>
+                    <% }else{ %>
+                        <div class="meal-type"><%= i18n.__("MIDNIGHT") %></div>
+                    <% } %>
+                    <div class="meal-price"><%= m.price %></div> 
                 <% }); %>
-            </div>
             <% }); %>
+            </div>
         <% }else{ %>
-            <div>Please Confirm Date Scoped</div>
+            <h3 style="text-align: center; color: #ff4584;"><%= i18n.__("NO_DATA") %></h2>
         <% } %>
         <div class="total-price">
-            <div>Total</div>
+            <div><%= i18n.__("TOTAL") %></div>
             <div class="price" id="price">0</div>
         </div>
     </div>

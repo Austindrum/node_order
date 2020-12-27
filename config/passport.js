@@ -14,12 +14,20 @@ passport.use(new LocalStrategy(
     User.findOne({ where: { work_id: username } })
     .then(user=>{
         if(!user) {
-            return done(null, false, req.flash("error_message", "User Not Find!"));
+            if(req.cookies.i18n === "en"){
+                return done(null, false, req.flash("error_message", "User Not Find!"));
+            }else{
+                return done(null, false, req.flash("error_message", "無此使用者"));
+            }
         }
         return bcrypt.compare(password, user.password)
         .then(isMatch => {
             if(!isMatch) {
-                return done(null, false, req.flash("error_message", "Password inccorect"));
+                if(req.cookies.i18n === "en"){
+                    return done(null, false, req.flash("error_message", "Password inccorect"));
+                }else{
+                    return done(null, false, req.flash("error_message", "密碼錯誤"));
+                }
             }
             return done(null, user)
         })

@@ -4,13 +4,15 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const flash = require("connect-flash");
 const passport = require("./config/passport");
-const methodOverride = require('method-override')
+const methodOverride = require('method-override');
+const cookieParser = require("cookie-parser");
 
 app.use(express.static(__dirname + "/public"));
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(methodOverride('_method'))
+app.use(methodOverride('_method'));
+app.use(cookieParser("Austin"));
 app.use(session({
     secret: "Austin",
     resave: false,

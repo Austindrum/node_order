@@ -9,30 +9,54 @@ const Order = db.Order;
 const OrderMeal = db.OrderMeal;
 const passport = require("../config/passport");
 const bcrypt = require("bcryptjs");
+const i18n = require("i18n");
 
+// i18n config
+i18n.configure({
+    locales: ['en', 'zh'],
+    directory: __dirname + "/locales",
+    defaultLocale: 'zh',
+    cookie: 'i18n'
+})
+
+// check is login for user
 const authenticated = (req, res, next) => {
     if(req.isAuthenticated()){
         return next();
     }else{
-        req.flash("error_message", "Login First Please!");
+        if(req.cookies.i18n === "en"){
+            req.flash("error_message", "Login First Please!");
+        }else{
+            req.flash("error_message", "請先登入");
+        }
         return res.redirect("/signin");
     }
 }
 
+// check is login for admin
 const authenticatedAdmin = (req, res, next) => {
     if(req.isAuthenticated()){
         if(req.user.id === 3){
             return next();
         }else{
-            req.flash("warning_message", "Sorry, You aren't Admin");
+            if(req.cookies.i18n === "en"){
+                req.flash("warning_message", "Sorry, You aren't Admin");
+            }else{
+                req.flash("warning_message", "非管理員");
+            }
             return res.redirect("/order");
         }
     }else{
-        req.flash("error_message", "Login First Please!");
+        if(req.cookies.i18n === "en"){
+            req.flash("error_message", "Login First Please!");
+        }else{
+            req.flash("error_message", "請先登入");
+        }
         return res.redirect("/signin");
     }
 }
 
+// check is login to vist signin page
 const isLogin = (req, res, next) => {
     if(req.isAuthenticated()){
         if(req.user.id === 3){
@@ -98,7 +122,7 @@ async function getDateMeals(targetDate, userId, res){
             dinner: moment(dateTime.dinner).valueOf() < moment().valueOf(),
             midnight: moment(dateTime.midnight).valueOf() < moment().valueOf(),
         }
-        return res.render("order", { meals, date, overTime, orderedInfo, ordersDate});
+        return res.render("order", { i18n: res, meals, date, overTime, orderedInfo, ordersDate});
     }else{
         const meals = [];
         const date = targetDate;
@@ -107,12 +131,25 @@ async function getDateMeals(targetDate, userId, res){
             dinner: false,
             midnight: false
         };
-        return res.render("order", { meals, date, overTime, orderedInfo, ordersDate});
+        return res.render("order", { i18n: res, meals, date, overTime, orderedInfo, ordersDate});
     }
 
 }
 
 module.exports = (app) => {
+    // i18n middleware to routes
+    app.use(i18n.init);
+    
+    app.get('/zh', function (req, res) {
+        res.cookie('i18n', 'zh');
+        res.redirect('/signin')
+    });
+    
+    app.get('/en', function (req, res) {
+        res.cookie('i18n', 'en');
+        res.redirect('/signin')
+    });
+    
     app.get("/", authenticatedAdmin, (req, res)=>{
         if(req.user.work_id === "P0000"){
             return res.redirect("/orderform");
@@ -120,10 +157,10 @@ module.exports = (app) => {
             return res.redirect("/order");
         }
     })
-
     // user login
     app.get("/signin", isLogin, (req, res)=>{
-        return res.render("signin");
+        const lang = req.cookies.i18n;
+        return res.render("signin", { i18n: res, lang });
     })
     app.post("/signin", isLogin,
     passport.authenticate('local', {
@@ -135,10 +172,18 @@ module.exports = (app) => {
             return res.redirect("/orderform");
         }else{
             if(req.user.isFirstLogin){
-                req.flash("warning_message", "First Login! Suggest Change Your Password!");
+                if(req.cookies.i18n === "en"){
+                    req.flash("warning_message", "First Login! Suggest Change Your Password!");  
+                }else{
+                    req.flash("warning_message", "第一次登入請修改密碼");
+                }
                 return res.redirect("/user");
             }else{
-                req.flash("success_message", "Login Success");
+                if(req.cookies.i18n === "en"){
+                    req.flash("success_message", "Login Success");    
+                }else{
+                    req.flash("success_message", "登入成功");
+                }
                 return res.redirect("/order");
             }
         }
@@ -146,7 +191,7 @@ module.exports = (app) => {
 
     // user edit password
     app.get("/user", authenticated, (req, res)=>{
-        return res.render("profile");
+        return res.render("profile", { i18n: res });
     })
     app.put("/user", authenticated, (req, res)=>{
         const currentPassword = req.body.current_password;
@@ -155,14 +200,22 @@ module.exports = (app) => {
         .then( async user=>{
             const isMatch = await bcrypt.compare(currentPassword, user.password);
             if(!isMatch) {
-                req.flash("error_message", "Password Incorrect");
+                if(req.cookies.i18n === "en"){
+                    req.flash("error_message", "登入密碼錯誤");
+                }else{
+                    req.flash("error_message", "Password Incorrect");
+                }
                 return res.redirect("/user");
             }else{
                 user.update({
                     password: bcrypt.hashSync(newPassword, bcrypt.genSaltSync(10), null),
                     isFirstLogin: false
                 }).then(()=>{
-                    req.flash("success_message", "User Update Success");
+                    if(req.cookies.i18n === "en"){
+                        req.flash("success_message", "User Update Success");
+                    }else{
+                        req.flash("success_message", "更新成功");
+                    }
                     return res.redirect("/order");
                 })
                 .catch(err=>console.log(err))
@@ -194,21 +247,21 @@ module.exports = (app) => {
             if(searchEmpty){
                 data = orders.filter(order => order.date === today);
                 targetDay = today;
-                return res.render("history", { data, targetDay });
+                return res.render("history", { i18n: res, data, targetDay });
             // user history target date
             }else{
                 const from = current_url.searchParams.get("from");
                 const to = current_url.searchParams.get("to");
                 if(!from && !to){
-                    return res.render("history", { data, targetDay });
+                    return res.render("history", { i18n: res, data, targetDay });
                 }
                 if(from && !to){
                     data = orders.filter(order => from === order.date);
                     targetDay = from;
-                    return res.render("history", { data, targetDay });
+                    return res.render("history", { i18n: res, data, targetDay });
                 }
                 if(!from && to){
-                    return res.render("history", { data, targetDay });
+                    return res.render("history", { i18n: res, data, targetDay });
                 }
                 if(from && to){
                     data = orders.filter(order => moment(order.data).isBetween(from, to));
@@ -216,7 +269,7 @@ module.exports = (app) => {
                         return moment(a.date) - moment(b.date);
                     })
                     targetDay = `${from} ~ ${to}`;
-                    return res.render("history", { data, targetDay });
+                    return res.render("history", { i18n: res, data, targetDay });
                 }
             }
         })
@@ -243,12 +296,20 @@ module.exports = (app) => {
                 if(req.body.midnight) await OrderMeal.create({ OrderId: order.id, MealId: req.body.midnight });
             })
             .then(()=>{
-                req.flash("success_message", "Order Create Success");
+                if(req.cookies.i18n === "en"){
+                    req.flash("success_message", "Order Create Success");
+                }else{
+                    req.flash("success_message", "訂單建立成功");
+                }
                 return res.redirect(`/order/${req.body.date}`);
             })
             .catch(err=>console.log(err))
         }else{
-            req.flash("error_message", "Please Select An Meal");
+            if(req.cookies.i18n === "en"){
+                req.flash("success_message", "Please Select An Meal");
+            }else{
+                req.flash("success_message", "請選擇餐點");
+            }
             return res.redirect(`/order/${req.body.date}`);
         }
     })
@@ -264,7 +325,11 @@ module.exports = (app) => {
             if(req.body.midnight) await OrderMeal.create({ OrderId: req.body.orderId, MealId: req.body.midnight });
         })
         .then(()=>{
-            req.flash("success_message", "Edit Success");
+            if(req.cookies.i18n === "en"){
+                req.flash("success_message", "Edit Success");
+            }else{
+                req.flash("success_message", "更新成功");
+            }
             return res.redirect(`/order/${req.body.date}`);
         })
         .catch(err => console.log(err))
@@ -282,7 +347,11 @@ module.exports = (app) => {
             }
         })
         .catch(err=>console.log(err));
-        req.flash("error_message", "Delete Success");
+        if(req.cookies.i18n === "en"){
+            req.flash("error_message", "Delete Success");
+        }else{
+            req.flash("error_message", "刪除成功");
+        }
         return res.redirect(`/order/${req.body.date}`);
     })
 
@@ -353,7 +422,6 @@ module.exports = (app) => {
             ]
         });
         const meals = datemeals.map(data=> data.meal );
-        console.log(meals);
         return res.render("admin/meals", { meals, date });
     })
     app.get("/meals", authenticatedAdmin, async (req, res)=>{
@@ -375,55 +443,81 @@ module.exports = (app) => {
         return res.render("admin/meals", { meals, date });
     })
     app.post("/meals", async (req, res)=>{
-        const date = await Date.create({
-            date: req.body.date
-        }).then(date => date.toJSON());
-        if(req.body.breakfastName.length > 0){
-            req.body.breakfastName.forEach( async(b, i)=>{
-                await Meal.create({
-                    name: b,
-                    price: req.body.breakfastPrice[i],
-                    type: "b"
-                }).then(async meal=>{
-                    await DateMeal.create({
-                        DateId: date.id,
-                        MealId: meal.toJSON().id
+        async function createDateMeals(dateId){
+            if(req.body.breakfastName.length > 0){
+                req.body.breakfastName.forEach( async(b, i)=>{
+                    await Meal.create({
+                        name: b,
+                        en_name: req.body.breakfastEnName[i],
+                        price: parseInt(req.body.breakfastPrice[i]),
+                        type: "b"
+                    }).then(async meal=>{
+                        await DateMeal.create({
+                            DateId: dateId,
+                            MealId: meal.toJSON().id
+                        })
                     })
                 })
-            })
-        }
-        if(req.body.dinnerName.length > 0){
-            req.body.dinnerName.forEach( async(d, i)=>{
-                await Meal.create({
-                    name: d,
-                    price: req.body.dinnerPrice[i],
-                    type: "d"
-                }).then(async meal=>{
-                    await DateMeal.create({
-                        DateId: date.id,
-                        MealId: meal.toJSON().id
+            }
+            if(req.body.dinnerName.length > 0){
+                req.body.dinnerName.forEach( async(d, i)=>{
+                    await Meal.create({
+                        name: d,
+                        en_name: req.body.dinnerEnName[i],
+                        price: parseInt(req.body.dinnerPrice[i]),
+                        type: "d"
+                    }).then(async meal=>{
+                        await DateMeal.create({
+                            DateId: dateId,
+                            MealId: meal.toJSON().id
+                        })
                     })
                 })
-            })
-        }
-        if(req.body.midnightName.length > 0){
-            req.body.midnightName.forEach( async(m, i)=>{
-                await Meal.create({
-                    name: m,
-                    price: req.body.midnightPrice[i],
-                    type: "m"
-                }).then(async meal=>{
-                    await DateMeal.create({
-                        DateId: date.id,
-                        MealId: meal.toJSON().id
+            }
+            if(req.body.midnightName.length > 0){
+                req.body.midnightName.forEach( async(m, i)=>{
+                    await Meal.create({
+                        name: m,
+                        en_name: parseInt(req.body.midnightEnName[i]),
+                        price: req.body.midnightPrice[i],
+                        type: "m"
+                    }).then(async meal=>{
+                        await DateMeal.create({
+                            DateId: dateId,
+                            MealId: meal.toJSON().id
+                        })
                     })
                 })
-            })
+            }
         }
-        return res.redirect(`/meals/${date.date}`);
+        
+        const hadDate = await Date.findAll({
+            raw: true,
+            nest: true,
+            where: { date: req.body.date }
+        }).then(date => date);
+
+        const targetDate = req.body.date;
+
+        if(hadDate.length > 0){
+            console.log(hadDate);
+            createDateMeals(hadDate.id)
+        }else{
+            const date = await Date.create({
+                date: req.body.date
+            }).then(date => date.toJSON());
+            console.log(date);
+            createDateMeals(date.id);
+        }
+        return res.redirect(`/meals/${targetDate}`);
     })
     app.get("/logout", (req, res)=>{
         req.logout();
+        if(req.cookies.i18n === "en"){
+            req.flash("success_message", "Logout Success");
+        }else{
+            req.flash("success_message", "登出成功");
+        }
         res.redirect("/signin");
     })
     app.get("*", (req, res)=>{

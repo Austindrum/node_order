@@ -162,6 +162,7 @@ var Cal = function(divId) {
       $(".breakfast-contain").append(`
         <div class="contain">
             <input type="text" placeholder="name" name="breakfastName[]">
+            <input type="text" placeholder="en_name" name="breakfastEnName[]">
             <input type="number" placeholder="price" name="breakfastPrice[]">
         </div>
       `);
@@ -170,6 +171,7 @@ var Cal = function(divId) {
       $(".dinner-contain").append(`
         <div class="contain">
             <input type="text" placeholder="name" name="dinnerName[]">
+            <input type="text" placeholder="en_name" name="dinnerEnName[]">
             <input type="number" placeholder="price" name="dinnerPrice[]">
         </div>
       `);
@@ -178,6 +180,7 @@ var Cal = function(divId) {
       $(".midnight-contain").append(`
         <div class="contain">
             <input type="text" placeholder="name" name="midnightName[]">
+            <input type="text" placeholder="en_name" name="midnightEnName[]">
             <input type="number" placeholder="price" name="midnightPrice[]">
         </div>
       `);
