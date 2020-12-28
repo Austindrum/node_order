@@ -29,7 +29,7 @@
             <% data.forEach(d => { %>
                 <% d.meal.forEach(m => { %>
                     <div class="meal-date"><%= d.date %></div>
-                    <div class="meal-name"><%= m.name %><br/><%= m.en_name %></div>
+                    <div class="meal-name"><%= m.name %><%= m.en_name %></div>
                     <% if(m.type === "b"){ %>
                         <div class="meal-type"><%= i18n.__("BREAKFAST") %></div>
                     <% }else if(m.type === "d"){ %>

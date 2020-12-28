@@ -271,6 +271,16 @@ footer p {
     text-transform:uppercase;
     transition:all 0.3s ease;
   }
+  @media only screen and (max-width: 376px){
+    .order .calendar-wrapper #btnPrev{
+      top: 4.5rem;
+      font-size: 1rem;
+    }
+    .order .calendar-wrapper #btnNext{
+      top: 4.5rem;
+      font-size: 1rem;
+    }
+  }
   .order .calendar-wrapper .prompt{
     display: flex;
   }
@@ -433,6 +443,9 @@ footer p {
   margin-bottom: 1rem;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+.history-data{
+  padding-bottom: 8rem;
+}
 .history-data h2{
   font-weight: 700;
   font-size: 3rem;
@@ -442,7 +455,7 @@ footer p {
 }
 .history-data .date-data{
   display: grid;
-  grid-template-columns: 25% 30% 25% 20%;
+  grid-template-columns: 25% 40% 25% 10%;
   margin: 10px 0;
 }
 .history-data .date-data.head{
@@ -465,6 +478,7 @@ footer p {
 .history-data .date-data .meal-name,
 .history-data .date-data .meal-type,
 .history-data .date-data .meal-price{
+  font-size: 1.3rem;
   margin: 10px 0;
 }
 .history-data .total-price{

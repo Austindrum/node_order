@@ -444,7 +444,7 @@ module.exports = (app) => {
     })
     app.post("/meals", async (req, res)=>{
         async function createDateMeals(dateId){
-            if(req.body.breakfastName.length > 0){
+            if(req.body.breakfastName[0] !== ""){
                 req.body.breakfastName.forEach( async(b, i)=>{
                     await Meal.create({
                         name: b,
@@ -459,7 +459,7 @@ module.exports = (app) => {
                     })
                 })
             }
-            if(req.body.dinnerName.length > 0){
+            if(req.body.dinnerName[0] !== ""){
                 req.body.dinnerName.forEach( async(d, i)=>{
                     await Meal.create({
                         name: d,
@@ -474,12 +474,12 @@ module.exports = (app) => {
                     })
                 })
             }
-            if(req.body.midnightName.length > 0){
+            if(req.body.midnightName[0] !== ""){
                 req.body.midnightName.forEach( async(m, i)=>{
                     await Meal.create({
                         name: m,
-                        en_name: parseInt(req.body.midnightEnName[i]),
-                        price: req.body.midnightPrice[i],
+                        en_name: req.body.midnightEnName[i],
+                        price: parseInt(req.body.midnightPrice[i]),
                         type: "m"
                     }).then(async meal=>{
                         await DateMeal.create({
@@ -490,7 +490,6 @@ module.exports = (app) => {
                 })
             }
         }
-        
         const hadDate = await Date.findAll({
             raw: true,
             nest: true,
@@ -500,13 +499,11 @@ module.exports = (app) => {
         const targetDate = req.body.date;
 
         if(hadDate.length > 0){
-            console.log(hadDate);
-            createDateMeals(hadDate.id)
+            createDateMeals(hadDate[0].id);
         }else{
             const date = await Date.create({
                 date: req.body.date
             }).then(date => date.toJSON());
-            console.log(date);
             createDateMeals(date.id);
         }
         return res.redirect(`/meals/${targetDate}`);

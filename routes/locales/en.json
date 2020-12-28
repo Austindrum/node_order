@@ -17,7 +17,7 @@
     "DINNER": "Dinner",
     "MIDNIGHT": "Midnight",
     "SELECT": "Select",
-    "ISORDER": "is ordered, check breakfast date is correct",
+    "ISORDER": "is ordered, note breakfast date",
     "DATEORDER": "Date Order",
     "DATEORDER_PROMPT": "Select date to show melas",
     "ORDEREND": "Order End",
