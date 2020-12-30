@@ -1,3 +1,3 @@
-$(".close-message").on("click", (e)=>{
+$(".close-message").on("click", function(e){
     $(".message").remove();
 })

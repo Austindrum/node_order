@@ -1,9 +1,9 @@
-$('.hamburger').on('click', (e)=>{
+$('.hamburger').on('click', function(e){
     e.preventDefault();
     $('.menu').addClass('show');
     $('body').addClass('show');
 })
-$('.close').on('click', (e)=>{
+$('.close').on('click', function(e){
     e.preventDefault();
     $('.menu').removeClass('show');
     $('body').removeClass('show');

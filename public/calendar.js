@@ -101,16 +101,20 @@ Cal.prototype.showMonth = function(y, m) {
             }
         }
         // Write the current day in the loop
-        let paramMonth = (this.currMonth + 1) < 10 ? `0${this.currMonth + 1}` : this.currMonth + 1;
-        let paramDate = i < 10 ? `0${i}` : i;
+        let paramMonth = (this.currMonth + 1) < 10 ? "0" + (this.currMonth + 1) : this.currMonth + 1;
+        let paramDate = i < 10 ? "0" + i : i;
+        let paramYear = this.currYear;
+        let isExsit = dateOrders.some(function(order){
+            return order.dataset.orderdate === paramYear + '-' + paramMonth + '-' + paramDate;
+        })
         if (this.chkY == this.currYear && this.chkM == this.currMonth && i == this.currDay) {
-            if(dateOrders.some(order=> order.dataset.orderdate === this.currYear + '-' + paramMonth + '-' + paramDate)){
+            if(isExsit){
                 html += '<td class="today"><span class="light"></span><a href="/order/' + this.currYear + '-' + paramMonth + '-' + paramDate +'">' + i + '</a></td>';
             }else{
                 html += '<td class="today"><a href="/order/' + this.currYear + '-' + paramMonth + '-' + paramDate +'">' + i + '</a></td>';
             }
         } else {
-            if(dateOrders.some(order=> order.dataset.orderdate === this.currYear + '-' + paramMonth + '-' + paramDate)){
+            if(isExsit){
                 html += '<td class="normal"><span class="light"></span><a href="/order/' + this.currYear + '-' + paramMonth + '-' + paramDate +'">' + i + '</a></td>';
             }else{
                 html += '<td class="normal"><a href="/order/' + this.currYear + '-' + paramMonth + '-' + paramDate +'">' + i + '</a></td>';

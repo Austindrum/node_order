@@ -112,8 +112,8 @@ var Cal = function(divId) {
       }
   
       // Write the current day in the loop
-      let paramMonth = (this.currMonth + 1) < 10 ? `0${this.currMonth + 1}` : this.currMonth + 1;
-      let paramDate = i < 10 ? `0${i}` : i;
+      let paramMonth = (this.currMonth + 1) < 10 ? "0" + (this.currMonth + 1) : this.currMonth + 1;
+      let paramDate = i < 10 ? "0" + i : i;
       if (this.chkY == this.currYear && this.chkM == this.currMonth && i == this.currDay) {
             html += '<td class="today"><a href="/meals/' + this.currYear + '-' + paramMonth + '-' + paramDate +'">' + i + '</a></td>';
       } else {
@@ -158,32 +158,14 @@ var Cal = function(divId) {
       c.previousMonth();
     };
 
-    $(".breakfast-plus").on("click", (e)=>{
-      $(".breakfast-contain").append(`
-        <div class="contain">
-            <input type="text" placeholder="name" name="breakfastName[]">
-            <input type="text" placeholder="en_name" name="breakfastEnName[]">
-            <input type="number" placeholder="price" name="breakfastPrice[]">
-        </div>
-      `);
+    $(".breakfast-plus").on("click", function(e){
+      $(".breakfast-contain").append('<div class="contain"><input type="text" placeholder="name" name="breakfastName[]"><input type="text" placeholder="en_name" name="breakfastEnName[]"><input type="number" placeholder="price" name="breakfastPrice[]"></div>');
     })
-    $(".dinner-plus").on("click", (e)=>{
-      $(".dinner-contain").append(`
-        <div class="contain">
-            <input type="text" placeholder="name" name="dinnerName[]">
-            <input type="text" placeholder="en_name" name="dinnerEnName[]">
-            <input type="number" placeholder="price" name="dinnerPrice[]">
-        </div>
-      `);
+    $(".dinner-plus").on("click", function(e){
+      $(".dinner-contain").append('<div class="contain"><input type="text" placeholder="name" name="dinnerName[]"><input type="text" placeholder="en_name" name="dinnerEnName[]"><input type="number" placeholder="price" name="dinnerPrice[]"></div>');
     })
-    $(".midnight-plus").on("click", (e)=>{
-      $(".midnight-contain").append(`
-        <div class="contain">
-            <input type="text" placeholder="name" name="midnightName[]">
-            <input type="text" placeholder="en_name" name="midnightEnName[]">
-            <input type="number" placeholder="price" name="midnightPrice[]">
-        </div>
-      `);
+    $(".midnight-plus").on("click", function(e){
+      $(".midnight-contain").append('<div class="contain"><input type="text" placeholder="name" name="midnightName[]"><input type="text" placeholder="en_name" name="midnightEnName[]"><input type="number" placeholder="price" name="midnightPrice[]"></div>');
     })
   }
   
