@@ -5,11 +5,11 @@
         <form action="/history" method="GET">
             <div class="history-block">
                 <p><strong><%= i18n.__("FROM") %></strong></p>
-                <input type="date" name="from">
+                <input type="date" name="from" placeholder="EX: 2020/12/12">
             </div>
             <div class="history-block">
                 <p><strong><%= i18n.__("TO") %></strong></p>
-                <input type="date" name="to">
+                <input type="date" name="to" placeholder="EX: 2020/12/12">
             </div>
             <div>
                 <input type="submit" value="<%= i18n.__("SEARCH") %>">

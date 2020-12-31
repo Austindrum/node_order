@@ -1,5 +1,9 @@
 var targetDay = document.getElementsByClassName("target-date")[0].dataset.date.split("-");
-var dateOrders = Array.from(document.querySelectorAll(".date-order").length > 0 ? document.getElementsByClassName("date-order") : []);
+var tempdateOrders = document.querySelectorAll(".date-order").length > 0 ? document.getElementsByClassName("date-order") : [];
+var dateOrders = [];
+for (let i = 0; i < tempdateOrders.length; i++) {
+    dateOrders.push(tempdateOrders[i]);
+}
 var Cal = function(divId) {
     //Store div id
     this.divId = divId;
