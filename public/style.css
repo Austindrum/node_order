@@ -466,8 +466,8 @@ footer p {
 }
 .history-data .date-data{
   display: grid;
-  /* display: -ms-grid;
-  -ms-grid-columns: 25% 40% 25% 10%; */
+  display: -ms-grid;
+  -ms-grid-columns: 25% 40% 25% 10%;
   grid-template-columns: 25% 40% 25% 10%;
   margin: 10px 0;
 }
