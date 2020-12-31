@@ -154,7 +154,7 @@ footer p {
   .order .info-block{
     display: grid;
     display: -ms-grid;
-    -ms-grid-column: 10% 35% 55%;
+    -ms-grid-columns: 10% 35% 55%;
     grid-template-columns: 10% 35% 55%;
     gap: 1rem;
     align-items: center;
