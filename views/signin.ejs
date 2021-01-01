@@ -17,9 +17,13 @@
             </div>
         </form>
         <div class="lang">
-            <a href="/en" class="<%= lang === "en" ? 'active' : "" %>"><%= i18n.__("LANG_EN") %></a>
+            <a href="/en" class="<%= lang === "en" ? 'active' : "" %>">English</a>
             <span>/</span>
-            <a href="/zh" class="<%= lang === "zh" ? 'active' : "" %>"><%= i18n.__("LANG_ZH") %></a>
+            <a href="/zh" class="<%= lang === "zh" ? 'active' : "" %>">Chinese</a>
+        </div>
+        <div class="browser-suggest">
+            <p><%= i18n.__("BROWSER_SUGGEST") %></p>
+            <p>Chrome ^57, Firefox ^52, Safari ^10.1, Edge ^16</p>
         </div>
     </div>
 </div>

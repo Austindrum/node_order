@@ -366,6 +366,17 @@ footer p {
   font-weight: 700;
   color: #ff4584;
 }
+.signin .browser-suggest{
+  margin-top: 20px;
+}
+.signin .browser-suggest p{
+  font-weight: 700;
+  font-size: 2px;
+  text-shadow:1px 1px 1px white;
+  color: black;
+  text-align: center;
+  padding: 2px;
+}
 .form-box{
   width: 80%;
   margin: 1rem auto;
@@ -546,7 +557,7 @@ footer p {
 }
 .message.warning{
   background-color: #FFA500;
-  color: black;
+  color: #fff;
 }
 /* Order Form */
 .order-form > h1{

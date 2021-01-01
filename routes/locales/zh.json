@@ -30,5 +30,6 @@
     "ORDER_TYPE": "類別",
     "ORDER_PRICE": "價格",
     "NO_DATA": "沒有紀錄",
-    "TOTAL": "總計"
+    "TOTAL": "總計",
+    "BROWSER_SUGGEST": "建議使用瀏覽器"
 }

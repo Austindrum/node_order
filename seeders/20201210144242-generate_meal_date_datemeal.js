@@ -1,6 +1,7 @@
 'use strict';
 const faker = require("faker");
 const bcrypt = require("bcryptjs");
+require("dotenv").config();
 
 function setDate(index) {
   let day = new Date();
@@ -20,15 +21,8 @@ module.exports = {
     return queryInterface.bulkInsert('Users', [
       {
         work_id: "P0000",
-        password: await bcrypt.hashSync("123", bcrypt.genSaltSync(10), null),
+        password: await bcrypt.hashSync(process.env.AMIN_PASSWORD, bcrypt.genSaltSync(10), null),
         isFirstLogin: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        work_id: "P1314",
-        password: await bcrypt.hashSync("123", bcrypt.genSaltSync(10), null),
-        isFirstLogin: true,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

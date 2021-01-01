@@ -30,5 +30,6 @@
     "ORDER_TYPE": "Type",
     "ORDER_PRICE": "Price",
     "NO_DATA": "No Data",
-    "TOTAL": "Total"
+    "TOTAL": "Total",
+    "BROWSER_SUGGEST": "Suggest use Browser in"
 }

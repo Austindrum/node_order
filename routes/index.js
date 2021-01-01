@@ -36,7 +36,7 @@ const authenticated = (req, res, next) => {
 // check is login for admin
 const authenticatedAdmin = (req, res, next) => {
     if(req.isAuthenticated()){
-        if(req.user.id === 3){
+        if(req.user.id === 1){
             return next();
         }else{
             if(req.cookies.i18n === "en"){
@@ -369,14 +369,14 @@ module.exports = (app) => {
     app.post("/adduser", authenticatedAdmin, async (req, res)=>{
         const userIds = req.body.id;
         const passwords = req.body.password;
-        User.create({
-            work_id: userIds[0],
-            password: passwords[0],
-            isFirstLogin: true
-        }).then((result)=>{
-            console.log(result);
+        userIds.forEach( async(userId, index)=>{
+            await User.create({
+                work_id: userId,
+                password: bcrypt.hashSync(passwords[index], bcrypt.genSaltSync(10), null),
+                isFirstLogin: true
+            })
         })
-        // return res.redirect("/adduser");
+        return res.redirect("/adduser");
     })
     app.get("/orderform", authenticatedAdmin, async (req, res)=>{
         const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
