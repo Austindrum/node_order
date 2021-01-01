@@ -363,6 +363,21 @@ module.exports = (app) => {
         })
         res.render("admin/shops", { shops });
     })
+    app.get("/adduser", authenticatedAdmin, (req, res)=>{
+        return res.render("admin/adduser");
+    })
+    app.post("/adduser", authenticatedAdmin, async (req, res)=>{
+        const userIds = req.body.id;
+        const passwords = req.body.password;
+        User.create({
+            work_id: userIds[0],
+            password: passwords[0],
+            isFirstLogin: true
+        }).then((result)=>{
+            console.log(result);
+        })
+        // return res.redirect("/adduser");
+    })
     app.get("/orderform", authenticatedAdmin, async (req, res)=>{
         const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
         let current_url = new URL(fullUrl);

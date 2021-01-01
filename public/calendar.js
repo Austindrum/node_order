@@ -23,7 +23,6 @@ var Cal = function(divId) {
     this.currMonth = parseInt(targetDay[1]) - 1;
     this.currYear = parseInt(targetDay[0]);
     this.currDay = parseInt(targetDay[2]);
-
     this.chkY = this.currYear;
     this.chkM = this.currMonth;
 };

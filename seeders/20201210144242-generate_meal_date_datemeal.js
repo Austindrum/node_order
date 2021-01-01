@@ -19,31 +19,6 @@ module.exports = {
   up: async (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('Users', [
       {
-        id: 0,
-        work_id: "P1314",
-        password: await bcrypt.hashSync("123", bcrypt.genSaltSync(10), null),
-        isFirstLogin: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: 1,
-        work_id: "P1234",
-        password: await bcrypt.hashSync("123", bcrypt.genSaltSync(10), null),
-        isFirstLogin: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: 2,
-        work_id: "P1000",
-        password: await bcrypt.hashSync("123", bcrypt.genSaltSync(10), null),
-        isFirstLogin: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: 3,
         work_id: "P0000",
         password: await bcrypt.hashSync("123", bcrypt.genSaltSync(10), null),
         isFirstLogin: false,
@@ -51,21 +26,12 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 4,
-        work_id: "P1111",
+        work_id: "P1314",
         password: await bcrypt.hashSync("123", bcrypt.genSaltSync(10), null),
         isFirstLogin: true,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-      {
-        id: 5,
-        work_id: "P2222",
-        password: await bcrypt.hashSync("123", bcrypt.genSaltSync(10), null),
-        isFirstLogin: true,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }
     ], {});
     // queryInterface.bulkInsert("Shops", Array.from({ length: 3 }).map((item, index) => 
     //   ({
