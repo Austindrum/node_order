@@ -122,7 +122,7 @@ async function getDateMeals(targetDate, userId, res){
             dinner: moment(dateTime.dinner).valueOf() < moment().valueOf(),
             midnight: moment(dateTime.midnight).valueOf() < moment().valueOf(),
         }
-        return res.render("order", { i18n: res, meals, date, overTime, orderedInfo, ordersDate});
+        return res.render("order", { i18n: res, targetDate, meals, date, overTime, orderedInfo, ordersDate});
     }else{
         const meals = [];
         const date = targetDate;
@@ -131,7 +131,7 @@ async function getDateMeals(targetDate, userId, res){
             dinner: false,
             midnight: false
         };
-        return res.render("order", { i18n: res, meals, date, overTime, orderedInfo, ordersDate});
+        return res.render("order", { i18n: res, targetDate, meals, date, overTime, orderedInfo, ordersDate});
     }
 
 }

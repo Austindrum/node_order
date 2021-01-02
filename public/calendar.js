@@ -50,7 +50,6 @@ Cal.prototype.previousMonth = function() {
         this.currYear = this.currYear - 1;
         this.chkY = this.chkY - 1;
 
-        
     }
     else {
         this.chkM = this.chkM - 1;

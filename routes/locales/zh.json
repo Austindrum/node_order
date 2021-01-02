@@ -31,5 +31,7 @@
     "ORDER_PRICE": "價格",
     "NO_DATA": "沒有紀錄",
     "TOTAL": "總計",
-    "BROWSER_SUGGEST": "建議使用瀏覽器"
+    "BROWSER_SUGGEST": "建議使用瀏覽器",
+    "DATE_PROMPT": "可至頁面下方選擇日期",
+    "ORDER_REMIND": "選擇完請按確認完成訂購"
 }

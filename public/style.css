@@ -151,6 +151,20 @@ footer p {
 }
 /* Order */
 @media only screen and (max-width: 768px){
+  .order .order-head h1{
+    text-align: center;
+    letter-spacing: 2px;
+    font-weight: 700;
+    text-shadow: 0.5px 0.5px 0.5px #ff4584;
+  }
+  .order .order-head p{
+    font-size: 0.5rem;
+    text-align: center;
+    color: #ff4584;
+    font-weight: 700;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid#DCDCDC;
+  }
   .order .info-block{
     display: grid;
     /* display: -ms-grid; */
@@ -170,12 +184,19 @@ footer p {
     outline: none;
     border-radius: 5px;
   }
+  .order .confirm-remind{
+    text-align: center;
+    padding-top: 1.5rem;
+    letter-spacing: 2px;
+    font-weight: 700;
+    color: #ff4584;
+  }
   .order .info-block .user-id{
     letter-spacing: 0.3rem;
   }
   .order input[type="submit"]{
     width: 100%;
-    padding: 5px 10px;
+    padding: 7px 10px;
     outline: none;
     font-weight: 400;
     border: none;

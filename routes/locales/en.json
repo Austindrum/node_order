@@ -31,5 +31,7 @@
     "ORDER_PRICE": "Price",
     "NO_DATA": "No Data",
     "TOTAL": "Total",
-    "BROWSER_SUGGEST": "Suggest use Browser in"
+    "BROWSER_SUGGEST": "Suggest use Browser in",
+    "DATE_PROMPT": "To select date on the bottom of page",
+    "ORDER_REMIND": "Press confirm after selected to complete order"
 }

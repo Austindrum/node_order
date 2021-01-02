@@ -3,8 +3,12 @@
     <% ordersDate.forEach(date=>{ %>
         <div style="display: none;" class="date-order" data-orderDate="<%= date %>"></div>
     <% }) %>  
-<% } %>  
+<% } %>
 <div class="container order">
+    <div class="order-head">
+        <h1><%= targetDate %></h1>
+        <p><%= i18n.__("DATE_PROMPT") %></p>
+    </div>
     <form 
     <% if(orderedInfo.length > 0){ %>
         action="/order?_method=PUT" method="POST"
@@ -89,6 +93,7 @@
                 <% }) %>
             </select>
         </div>
+        <p class="confirm-remind"><%= i18n.__("ORDER_REMIND") %></p>
         <% if(overTime.breakfast && overTime.dinner && overTime.midnight){ %>
             <div style="margin: 1rem 0;">
                 <p style="text-align: center; font-weight: 700; font-size: 2rem; color: #ff4584;"><%= i18n.__("ORDEREND") %></p>
