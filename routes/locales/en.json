@@ -32,6 +32,6 @@
     "NO_DATA": "No Data",
     "TOTAL": "Total",
     "BROWSER_SUGGEST": "Suggest use Browser in",
-    "DATE_PROMPT": "To select date on the bottom of page",
-    "ORDER_REMIND": "Press confirm after selected to complete order"
+    "DATE_PROMPT": "Select date on the bottom of page",
+    "ORDER_REMIND": "Press confirm after selected"
 }
