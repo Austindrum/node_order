@@ -1,9 +1,18 @@
 <%- include("../partials/header"); %>
 <div class="container add-user">
-    <form action="/searchUser" method="GET">
-        <input type="text" name="work_id">
-        <input type="submit" value="查詢">
-    </form>
+    <% if(work_id.length === 0){ %>
+        <form action="/searchUser" method="GET">
+            <input type="text" name="work_id">
+            <input type="submit" value="查詢">
+        </form>
+    <% } %>
+    <% if(work_id.length > 0){ %>
+        <form action="/adduser?_method=PUT" method="POST">
+            <input type="hidden" name="id" value="<%= work_id[0].id %>">
+            from <%= work_id[0].work_id %> to <input type="text" name="newId">
+            <input type="submit" value="Reset">
+        </form>
+    <% } %>
     <input type="file" id="excel-file">
     <form action="/adduser" method="POST">
         <div id="excel-json">

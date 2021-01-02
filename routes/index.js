@@ -370,9 +370,19 @@ module.exports = (app) => {
         });
         return res.redirect("/shops");
     })
-
     app.get("/adduser", authenticatedAdmin, (req, res)=>{
-        return res.render("admin/adduser");
+        const work_id = [];
+        return res.render("admin/adduser", { work_id });
+    })
+    app.get("/searchUser", authenticatedAdmin, async(req, res)=>{
+        const work_id = await User.findAll({
+            raw: true,
+            nest: true,
+            where: {
+                work_id: req.query.work_id
+            }
+        })
+        res.render("admin/adduser", { work_id });
     })
     app.post("/adduser", authenticatedAdmin, async (req, res)=>{
         const userIds = req.body.id;
@@ -386,8 +396,14 @@ module.exports = (app) => {
         })
         return res.redirect("/adduser");
     })
-
-
+    app.put("/adduser", authenticatedAdmin, async(req, res)=>{
+        const user = await User.findByPk(req.body.id);
+        await user.update({
+            work_id: req.body.newId,
+            password: bcrypt.hashSync(req.body.newId, bcrypt.genSaltSync(10), null),
+        });
+        return res.redirect("/adduser");
+    })
     app.get("/orderform", authenticatedAdmin, async (req, res)=>{
         const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
         let current_url = new URL(fullUrl);
@@ -467,7 +483,7 @@ module.exports = (app) => {
         const meals = datemeals.map(data=> data.meal );
         return res.render("admin/meals", { meals, date });
     })
-    app.post("/meals", async (req, res)=>{
+    app.post("/meals", authenticatedAdmin, async (req, res)=>{
         async function createDateMeals(dateId){
             if(req.body.breakfastName[0] !== ""){
                 req.body.breakfastName.forEach( async(b, i)=>{
