@@ -430,7 +430,9 @@ footer p {
   font-size: 1.5rem;
 }
 @media only screen and (max-width: 768px){
-
+  .signin .browser-suggest{
+    font-size: 15px;
+  }
 }
 /* History */
 .date .history-block{

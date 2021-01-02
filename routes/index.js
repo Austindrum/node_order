@@ -223,7 +223,6 @@ module.exports = (app) => {
         })
         .catch(err=>console.log(err))
     })
-
     // user history
     app.get("/history", authenticated, async (req, res)=>{
         const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
@@ -363,6 +362,15 @@ module.exports = (app) => {
         })
         res.render("admin/shops", { shops });
     })
+    app.post("/shops", authenticatedAdmin, async(req, res)=>{
+        await Shop.create({
+            name: req.body.name,
+            address: req.body.address,
+            tel: req.body.tel
+        });
+        return res.redirect("/shops");
+    })
+
     app.get("/adduser", authenticatedAdmin, (req, res)=>{
         return res.render("admin/adduser");
     })
@@ -378,6 +386,8 @@ module.exports = (app) => {
         })
         return res.redirect("/adduser");
     })
+
+
     app.get("/orderform", authenticatedAdmin, async (req, res)=>{
         const fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
         let current_url = new URL(fullUrl);

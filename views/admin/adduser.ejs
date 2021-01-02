@@ -1,5 +1,9 @@
 <%- include("../partials/header"); %>
 <div class="container add-user">
+    <form action="/searchUser" method="GET">
+        <input type="text" name="work_id">
+        <input type="submit" value="查詢">
+    </form>
     <input type="file" id="excel-file">
     <form action="/adduser" method="POST">
         <div id="excel-json">
