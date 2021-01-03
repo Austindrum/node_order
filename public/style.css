@@ -77,10 +77,6 @@ li{
 .navigation .logo{
   padding-left: 2rem;
 }
-.navigation .hamburger{
-  padding-right: 2rem;
-  cursor: pointer;
-}
 .nav h1{
   font-size: 2.5rem;
 }
@@ -88,6 +84,20 @@ li{
   display: flex;
   align-items: center;
 }
+.navigation .menu .top-nav .logo,
+.navigation .menu .top-nav .close,
+.navigation .hamburger{
+  display: none;
+}
+.navigation .menu .nav-list .nav-item{
+  padding: 0 1rem;
+}
+/* profile over 768 */
+.profile{
+  max-width: 600px;
+}
+
+/* footer over 768 */
 footer{
   /* height: 50px; */
   position: fixed;
@@ -137,6 +147,15 @@ footer p {
     padding: 1.6rem;
     color: white;
   }
+  .navigation .menu .top-nav .logo,
+  .navigation .menu .top-nav .close{
+    display: block;
+  }
+  .navigation .hamburger{
+    display: block;
+    padding-right: 2rem;
+    cursor: pointer;
+  }
   .nav-list{
     flex-direction: column;
     align-items: start;
@@ -146,15 +165,187 @@ footer p {
     margin-top: 2rem;
   }
 }
+/* Order over 768 */
+.order{
+  display: flex;
+}
+.order .order-wrapper,
+.order .calendar-wrapper{
+  width: 50%;
+  padding: 2rem;
+}
+.order .order-head p{
+  display: none;
+}
+.order .order-head h1{
+  text-align: center;
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-shadow: 0.5px 0.5px 0.5px #ff4584;
+  border-bottom: 3px solid #ff4584;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem
+}
+.order .info-block{
+  display: grid;
+  grid-template-columns: 10% 35% 55%;
+  gap: 1rem;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #DCDCDC;
+}
+.order .info-block select{
+  background-color: #243a6f;
+  color: white;
+  padding: .5rem;
+  border: none;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  outline: none;
+  border-radius: 5px;
+}
+.order .confirm-remind{
+  display: block;
+  text-align: center;
+  padding-top: 1.5rem;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: #ff4584;
+}
+.order input[type="submit"]{
+  width: 100%;
+  padding: 7px 10px;
+  outline: none;
+  font-weight: 400;
+  border: none;
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+  color: #607d8b;
+  background-color: transparent;
+  border-radius: 30px;
+  margin-top: 1.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.order input[type="submit"].submit{
+  background-color: #243a6f;
+  color: white;
+  margin-bottom: 1.5rem;
+}
+.order input[type="submit"].edit{
+  background-color: #4CAF50;
+  color: white;
+}
+.order input[type="submit"].delete{
+  margin-bottom: 10px;
+  background-color: #fc7c7c;
+  color: white;
+}
+.order .calendar-wrapper .prompt{
+  display: flex;
+}
+.order .calendar-wrapper .prompt .light{
+  display: block;
+  margin-top: 10px;
+  margin-right: 10px;
+  width: 7px;
+  height: 7px;
+  background-color: rgb(64, 255, 0);
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 50%;
+}
+.order .calendar-wrapper .calendar-head{
+  background-color: #243a6f;
+  color: #fff;
+  border-radius: 10px 10px 0px 0px;
+  text-align: center;
+}
+@media only screen and (min-width: 769px){
+  .order .calendar-wrapper .btn-block{
+    display: flex;
+  }
+  .order .calendar-wrapper #btnPrev,
+  .order .calendar-wrapper #btnNext{
+    border-radius: 0;
+    border: 2px solid rgb(220,220,255);
+    border-bottom: none;
+    outline: none;
+    height: 3.5rem;
+    width: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  .order .calendar-wrapper #btnPrev:hover,
+  .order .calendar-wrapper #btnNext:hover{
+    color: white;
+    background-color: #ff4584;
+  }
+}
+.order table,
+.meals table {
+  clear: both;
+  width:100%;
+  border:2px solid rgb(220,220,255);
+  border-radius:3px;
+  border-collapse:collapse;
+  color:#444;
+}
+.order table td,
+.meals table td {
+  font-size: 2rem;
+  height:48px;
+  text-align:center;
+  vertical-align:middle;
+  width: 60px;
+}
+.order table tbody td,
+.meals table tbody td {
+  position: relative;
+}
+.order table tbody td.today,
+.meals table tbody td.today {
+  font-weight:700;
+  color:white;
+  background-color: #fc7c7c;
+}
+.order table tbody td.today .light,
+.order table tbody td.normal .light{
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  width: 7px;
+  height: 7px;
+  background-color:rgb(64, 255, 0);
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  border-radius: 50%;
+}
+.order table thead td,
+.meal table thead td {
+  border:none;
+  color:rgb(40,40,59);
+  text-transform:uppercase;
+  font-size:2rem;
+}
+.order table td.not-current,
+.meals table td.not-current {
+  color:#c0c0c0;
+}
 /* Order */
 @media only screen and (max-width: 768px){
+  .order{
+    display: block;
+  }
+  .order .order-wrapper,
+  .order .calendar-wrapper{
+    width:100%;
+  }
   .order .order-head h1{
     text-align: center;
     letter-spacing: 2px;
     font-weight: 700;
     text-shadow: 0.5px 0.5px 0.5px #ff4584;
+    border-bottom: none;
   }
   .order .order-head p{
+    display: block;
     font-size: 1rem;
     text-align: center;
     color: #ff4584;
@@ -182,6 +373,7 @@ footer p {
     border-radius: 5px;
   }
   .order .confirm-remind{
+    display: block;
     text-align: center;
     padding-top: 1.5rem;
     letter-spacing: 2px;
@@ -233,10 +425,7 @@ footer p {
     position: relative;
     max-width:420px;
     margin: 0 auto;
-    /* margin-top: 2rem; */
     border-radius:5px;
-    /* box-shadow: 1px 1px 1px rgb(220,220,255); */
-    /* background:#fff; */
   }
   .order .calendar-wrapper{
     padding-bottom: 8rem;
@@ -248,8 +437,8 @@ footer p {
   }
   .order .calendar-wrapper #btnPrev{
     position: absolute;
-    top: 4.5rem;
-    left: 1.2rem;
+    top: 6rem;
+    left: 3rem;
     font-size: 1.5rem;
     padding-bottom: 1px;
     border-bottom: 1px solid white
@@ -269,8 +458,8 @@ footer p {
   }
   .order .calendar-wrapper #btnNext{
     position: absolute;
-    top: 4.5rem;
-    right: 1.2rem;
+    top: 6rem;
+    right: 3rem;
     font-size: 1.5rem;
     padding-bottom: 1px;
     border-bottom: 1px solid white;
@@ -298,13 +487,15 @@ footer p {
     text-transform:uppercase;
     transition:all 0.3s ease;
   }
-  @media only screen and (max-width: 376px){
+  @media only screen and (max-width: 321px){
     .order .calendar-wrapper #btnPrev{
-      top: 4.5rem;
+      top: 9rem;
+      left: 2.2rem;
       font-size: 1rem;
     }
     .order .calendar-wrapper #btnNext{
-      top: 4.5rem;
+      top: 9rem;
+      right: 2.2rem;
       font-size: 1rem;
     }
   }
@@ -374,6 +565,9 @@ footer p {
   }
 }
 /* Signin */
+.signin {
+  max-width: 600px;
+}
 .signin .lang{
   text-align: center;
 }
@@ -455,8 +649,6 @@ footer p {
 /* History */
 .date .history-block{
   display: grid;
-  /* display: -ms-grid; */
-  /* -ms-grid-columns: 20% 80%; */
   grid-template-columns: 20% 80%;
   gap: 1rem;
   align-items: center;
