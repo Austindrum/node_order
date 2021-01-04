@@ -1,8 +1,9 @@
 <%- include("../partials/header"); %>
 <div class="container order-form">
     <form action="/orderform" method="GET" class="order-date">
+        <span>日期查詢: </span>
         <input type="date" name="date">
-        <input type="submit" value="Search">
+        <input type="submit" value="查詢">
     </form>
     <h1><%= targetDate %></h1>
     <div class="order-info">
