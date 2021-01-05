@@ -36,8 +36,11 @@
             </div>
             <div class="info-block">
                 <i class="fas fa-coffee fa-lg"></i>
-                <p><strong><%= i18n.__("BREAKFAST") %></strong></p>
-                <select name="breakfast">
+                <p <% if(overTime.breakfast){ %>
+                    style="text-decoration: line-through;"
+                   <% } %>
+                ><strong><%= i18n.__("BREAKFAST") %></strong></p>
+                <select name="breakfast" <%= overTime.breakfast ? "disabled" : "" %>>
                     <option value=""><%= i18n.__("SELECT") %>..</option>
                     <% meals.forEach(e => { %>
                         <% if(e.type === "b"){ %>
@@ -56,8 +59,11 @@
             </div>
             <div class="info-block">
                 <i class="fas fa-utensils fa-lg"></i>
-                <p><strong><%= i18n.__("DINNER") %></strong></p>
-                <select name="dinner">
+                <p <% if(overTime.dinner){ %>
+                    style="text-decoration: line-through;"
+                   <% } %>
+                ><strong><%= i18n.__("DINNER") %></strong></p>
+                <select name="dinner" <%= overTime.dinner ? "disabled" : "" %>>
                     <option value=""><%= i18n.__("SELECT") %>..</option>
                     <% meals.forEach(e => { %>
                         <% if(e.type === "d"){ %>
@@ -76,8 +82,11 @@
             </div>
             <div class="info-block">
                 <i class="fas fa-moon fa-lg"></i>
-                <p><strong><%= i18n.__("MIDNIGHT") %></strong></p>
-                <select name="midnight">
+                <p <% if(overTime.midnight){ %>
+                    style="text-decoration: line-through;"
+                   <% } %>
+                ><strong><%= i18n.__("MIDNIGHT") %></strong></p>
+                <select name="midnight" <%= overTime.midnight ? "disabled" : "" %>>
                     <option value=""><%= i18n.__("SELECT") %>..</option>
                     <% meals.forEach(e => { %>
                         <% if(e.type === "m"){ %>

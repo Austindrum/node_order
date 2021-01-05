@@ -113,9 +113,9 @@ async function getDateMeals(targetDate, userId, res){
         const meals = datemeals.toJSON().meal;
         const date = datemeals.toJSON().date;
         const dateTime = {
-            breakfast: `${date}T20:49:59+08:00`,
-            dinner: `${date}T16:29:59+08:00`,
-            midnight: `${date}T20:49:59+08:00`
+            breakfast: `${date}T23:59:59+08:00`,
+            dinner: `${date}T17:00:00+08:00`,
+            midnight: `${date}T23:59:59+08:00`
         };
         const overTime = {
             breakfast: moment(dateTime.breakfast).subtract(1, 'day') < moment().valueOf(),
