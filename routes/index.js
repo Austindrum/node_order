@@ -428,7 +428,7 @@ module.exports = (app) => {
                     }
                 ]
             })
-            orders.forEach(order=>{
+            await orders.forEach(order=>{
                 order.timeFormat = `${moment(order.createdAt).format("L")}-${moment(order.createdAt).format("LT")}` 
             })
             targetDate = today;
@@ -450,6 +450,9 @@ module.exports = (app) => {
             })
             targetDate = target;
         }
+        orders.forEach(order=>{
+            console.log(order);
+        })
         return res.render("admin/orderform", { orders, targetDate });
     })
     app.get("/meals/:date", authenticatedAdmin, async (req, res)=>{
