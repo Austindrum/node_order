@@ -428,8 +428,11 @@ module.exports = (app) => {
                     }
                 ]
             })
-            await orders.forEach(order=>{
-                order.timeFormat = `${moment(order.createdAt).format("L")}-${moment(order.createdAt).format("LT")}` 
+            orders.forEach(order=>{
+                order.timeFormat = `1234` 
+            })
+            orders.forEach(order=>{
+                console.log(order);
             })
             targetDate = today;
         }else{
