@@ -33,5 +33,6 @@
     "TOTAL": "Total",
     "BROWSER_SUGGEST": "Suggest use Browser in",
     "DATE_PROMPT": "Select date on the bottom of page",
-    "ORDER_REMIND": "Press confirm after selected"
+    "ORDER_REMIND": "Press confirm after selected",
+    "END": "End"
 }

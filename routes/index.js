@@ -450,9 +450,6 @@ module.exports = (app) => {
             })
             targetDate = target;
         }
-        orders.forEach(order=>{
-            console.log(order);
-        })
         return res.render("admin/orderform", { orders, targetDate });
     })
     app.get("/meals/:date", authenticatedAdmin, async (req, res)=>{

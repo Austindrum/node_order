@@ -36,10 +36,12 @@
             </div>
             <div class="info-block">
                 <i class="fas fa-coffee fa-lg"></i>
-                <p <% if(overTime.breakfast){ %>
-                    style="text-decoration: line-through;"
-                   <% } %>
-                ><strong><%= i18n.__("BREAKFAST") %></strong></p>
+                <p>
+                    <strong><%= i18n.__("BREAKFAST") %></strong>
+                    <% if(overTime.breakfast){ %>
+                        <span style="font-weight: 500; color: #ff4584;"><%= i18n.__("END") %></span>
+                    <% } %>
+                </p>
                 <select name="breakfast" <%= overTime.breakfast ? "disabled" : "" %>>
                     <option value=""><%= i18n.__("SELECT") %>..</option>
                     <% meals.forEach(e => { %>
@@ -59,10 +61,12 @@
             </div>
             <div class="info-block">
                 <i class="fas fa-utensils fa-lg"></i>
-                <p <% if(overTime.dinner){ %>
-                    style="text-decoration: line-through;"
-                   <% } %>
-                ><strong><%= i18n.__("DINNER") %></strong></p>
+                <p>
+                    <strong><%= i18n.__("DINNER") %></strong>
+                    <% if(overTime.dinner){ %>
+                        <span style="font-weight: 500; color: #ff4584;"><%= i18n.__("END") %></span>
+                    <% } %>
+                </p>
                 <select name="dinner" <%= overTime.dinner ? "disabled" : "" %>>
                     <option value=""><%= i18n.__("SELECT") %>..</option>
                     <% meals.forEach(e => { %>
@@ -82,10 +86,12 @@
             </div>
             <div class="info-block">
                 <i class="fas fa-moon fa-lg"></i>
-                <p <% if(overTime.midnight){ %>
-                    style="text-decoration: line-through;"
-                   <% } %>
-                ><strong><%= i18n.__("MIDNIGHT") %></strong></p>
+                <p>
+                    <strong><%= i18n.__("MIDNIGHT") %></strong>
+                    <% if(overTime.midnight){ %>
+                        <span style="font-weight: 500; color: #ff4584;"><%= i18n.__("END") %></span>
+                    <% } %>
+                </p>
                 <select name="midnight" <%= overTime.midnight ? "disabled" : "" %>>
                     <option value=""><%= i18n.__("SELECT") %>..</option>
                     <% meals.forEach(e => { %>
