@@ -429,7 +429,7 @@ module.exports = (app) => {
                 ]
             })
             orders.forEach(order=>{
-                order.timeFormat = `1234` 
+                order.timeFormat = `${moment(order.createdAt).format("L")}-${moment(order.createdAt).format("LT")}` 
             })
             orders.forEach(order=>{
                 console.log(order);
