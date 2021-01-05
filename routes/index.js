@@ -429,7 +429,12 @@ module.exports = (app) => {
                 ]
             })
             orders.map(order=>{
-                return order.createdAt = `${moment(order.createdAt).format("L")}-${moment(order.createdAt).format("LT")}`
+                let date = moment(order.createdAt).format("L");
+                let time = moment(order.createdAt).format("LT")
+                return order.createdAt = date + "-"  +time;
+            })
+            orders.forEach(order=>{
+                console.log(order.createdAt);
             })
             targetDate = today;
         }else{
