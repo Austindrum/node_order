@@ -431,9 +431,6 @@ module.exports = (app) => {
             orders.forEach(order=>{
                 order.timeFormat = `${moment(order.createdAt).format("L")}-${moment(order.createdAt).format("LT")}` 
             })
-            orders.forEach(order=>{
-                console.log(order);
-            })
             targetDate = today;
         }else{
             const target = current_url.searchParams.get("date");
@@ -450,6 +447,9 @@ module.exports = (app) => {
                         as: "meal",
                     }
                 ]
+            })
+            orders.forEach(order=>{
+                order.timeFormat = `${moment(order.createdAt).format("L")}-${moment(order.createdAt).format("LT")}` 
             })
             targetDate = target;
         }
