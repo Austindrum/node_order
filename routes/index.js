@@ -354,7 +354,9 @@ module.exports = (app) => {
         return res.redirect(`/order/${req.body.date}`);
     })
 
-    // ADMIN
+// ==============================================
+// ADMIN
+// ==============================================
     app.get("/shops", authenticatedAdmin, async(req, res)=>{
         const shops = await Shop.findAll({
             raw: true,
@@ -425,6 +427,9 @@ module.exports = (app) => {
                         as: "meal",
                     }
                 ]
+            })
+            orders.map(order=>{
+                return order.createdAt = `${moment(order.createdAt).format("L")}-${moment(order.createdAt).format("LT")}`
             })
             targetDate = today;
         }else{
