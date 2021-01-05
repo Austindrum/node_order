@@ -429,7 +429,7 @@ module.exports = (app) => {
                 ]
             })
             orders.forEach(order=>{
-                order.timeFormat = `${moment(order.createdAt).format("L")}-${moment(order.createdAt).format("LT")}` 
+                order.timeFormat = `${moment(order.createdAt).format("L")}-${moment(order.createdAt).add(8, "h").format("LT")}` 
             })
             targetDate = today;
         }else{
@@ -449,7 +449,7 @@ module.exports = (app) => {
                 ]
             })
             orders.forEach(order=>{
-                order.timeFormat = `${moment(order.createdAt).format("L")}-${moment(order.createdAt).format("LT")}` 
+                order.timeFormat = `${moment(order.createdAt).format("L")}-${moment(order.createdAt).add(8, "h").format("LT")}` 
             })
             targetDate = target;
         }
